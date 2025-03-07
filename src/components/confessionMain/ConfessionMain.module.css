@@ -1,0 +1,319 @@
+/* Base container with improved background */
+.container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top right, #2d2d2d 0%, #1a1a1a 100%);
+    font-family: 'JetBrains Mono', monospace;
+    padding: 40px 20px;
+    opacity: 0;
+    transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle animated background elements */
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(125deg, rgba(255, 0, 122, 0.03) 0%, rgba(255, 77, 77, 0.03) 100%);
+    mask-image: repeating-linear-gradient(45deg, #000 0%, transparent 0.5%, transparent 1%, #000 1.5%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.container.mounted {
+    opacity: 1;
+}
+
+/* Refined confession container with better depth */
+.confessContainer {
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(26, 26, 26, 0.9);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(255, 0, 122, 0.25),
+        0 1px 3px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 0, 122, 0.2);
+    position: relative;
+    z-index: 2;
+}
+
+.confessContainer:hover {
+    box-shadow: 0 15px 40px rgba(255, 0, 122, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    transform: translateY(-5px);
+}
+
+/* Enhanced heading for more impact */
+.label {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ff007a;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px rgba(255, 0, 122, 0.5),
+        0 0 20px rgba(255, 0, 122, 0.2);
+    text-align: center;
+    position: relative;
+    display: inline-block;
+}
+
+.label::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    width: 50%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ff007a, transparent);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.inputContainer {
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Improved textarea with better focus states */
+.textarea {
+    width: 100%;
+    max-width: 750px;
+    min-height: 180px;
+    background: rgba(45, 45, 45, 0.8);
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-family: 'JetBrains Mono', monospace;
+    border: 2px solid rgba(255, 0, 122, 0.6);
+    border-radius: 15px;
+    padding: 20px;
+    resize: none;
+    outline: none;
+    box-shadow: 0 0 15px rgba(255, 0, 122, 0.2),
+        inset 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-sizing: border-box;
+    line-height: 1.6;
+}
+
+.textarea:focus {
+    border-color: #ff4d4d;
+    box-shadow: 0 0 20px rgba(255, 77, 77, 0.4),
+        inset 0 2px 10px rgba(0, 0, 0, 0.2);
+    background: rgba(51, 51, 51, 0.9);
+}
+
+.textarea::placeholder {
+    color: rgba(176, 176, 176, 0.7);
+    font-family: 'JetBrains Mono', monospace;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* Character counter with status colors */
+.characterCount {
+    font-size: 0.95rem;
+    margin-top: 12px;
+    text-align: right;
+    padding: 4px 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    width: auto;
+    align-self: flex-end;
+}
+
+.characterCount.tooShort {
+    color: #ff9800;
+    background: rgba(255, 152, 0, 0.1);
+}
+
+.characterCount.valid {
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.characterCount.tooLong {
+    color: #f44336;
+    background: rgba(244, 67, 54, 0.1);
+}
+
+/* Alert styling */
+.alert {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: rgba(255, 152, 0, 0.2);
+    color: #ff9800;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+    border-left: 3px solid #ff9800;
+}
+
+/* Button with more polished animations */
+.button {
+    padding: 14px 35px;
+    border-radius: 30px;
+    min-width: 180px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    margin-top: 10px;
+}
+
+.button.active {
+    background: linear-gradient(45deg, #ff007a, #ff4d4d);
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(255, 0, 122, 0.4);
+    cursor: pointer;
+}
+
+.button.active:hover {
+    background: linear-gradient(45deg, #ff4d4d, #ff007a);
+    box-shadow: 0 10px 30px rgba(255, 0, 122, 0.6);
+    transform: translateY(-3px) scale(1.03);
+}
+
+.button.active:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 5px 15px rgba(255, 0, 122, 0.3);
+}
+
+.button.disabled {
+    background: #444444;
+    color: #888888;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Button ripple effect */
+.button.active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.4);
+    opacity: 0;
+    border-radius: 50%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.button.active:focus:not(:active)::after {
+    animation: ripple 0.8s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+/* Spinner animation */
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive styles with improved behavior */
+@media (max-width: 768px) {
+    .confessContainer {
+        width: 95%;
+        padding: 25px 20px;
+    }
+
+    .label {
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+    }
+
+    .textarea {
+        font-size: 1rem;
+        min-height: 150px;
+        padding: 15px;
+    }
+
+    .button {
+        font-size: 1.1rem;
+        padding: 12px 30px;
+        min-width: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 15px;
+    }
+
+    .confessContainer {
+        padding: 20px 15px;
+    }
+
+    .label {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+    }
+
+    .textarea {
+        font-size: 1rem;
+        min-height: 130px;
+        padding: 12px;
+    }
+
+    .button {
+        font-size: 1rem;
+        padding: 10px 25px;
+        min-width: 140px;
+    }
+}

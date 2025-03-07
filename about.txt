@@ -1,0 +1,3 @@
+Decentralized redemption through confessions.
+
+Proof of Regret: A decentralized confession platform on Ethereum. Users confess, forgive, and heal through smart contracts, styled with a cyberpunk edge. Built with React, ethers.js, and custom hooks.
