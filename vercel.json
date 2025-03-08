@@ -1,0 +1,20 @@
+{
+    "rewrites": [
+        {
+            "source": "/confess",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/confessions",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/docs",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/:path*",
+            "destination": "/index.html"
+        }
+    ]
+}
