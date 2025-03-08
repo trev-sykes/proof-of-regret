@@ -3,12 +3,12 @@ import { X } from "lucide-react";
 import { PuffLoader } from "react-spinners";
 import { motion } from "framer-motion";
 import { CheckCircle, XCircle } from "lucide-react";
-interface CustomAlertProps {
+interface AlertProps {
     type: string | null;
     message: string | null;
     onClose: Function;
 }
-const CustomAlert: React.FC<CustomAlertProps> = ({ type, message, onClose }) => {
+const Alert: React.FC<AlertProps> = ({ type, message, onClose }) => {
 
     return (
         <div className={`${styles.container} ${type == 'error' ? styles.error : type == 'pending' ? styles.pending : type == 'success' ? styles.success : styles.unknown}`}>
@@ -44,4 +44,4 @@ const CustomAlert: React.FC<CustomAlertProps> = ({ type, message, onClose }) => 
         </div >
     )
 }
-export default CustomAlert;
+export default Alert;

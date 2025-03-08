@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useAlert from "../../hooks/useAlert";
-import CustomAlert from "../customAlert/CustomAlert";
+import CustomAlert from "../alert/Alert";
 import useContractWrite from "../../hooks/useContractWrite";
 import Swal from 'sweetalert2';
 import { useForm } from "../../hooks/useForm";

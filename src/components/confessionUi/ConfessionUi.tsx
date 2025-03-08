@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import useAlert from '../../hooks/useAlert';
 import useContractRead from '../../hooks/useContractRead';
 import useContractWrite from '../../hooks/useContractWrite';
-import CustomAlert from '../customAlert/CustomAlert';
+import CustomAlert from '../alert/Alert';
 import styles from "./ConfessionUi.module.css";
 
 interface Confession {
