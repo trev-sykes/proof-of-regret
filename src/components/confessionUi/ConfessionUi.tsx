@@ -6,7 +6,7 @@ import useAlert from '../../hooks/useAlert';
 import useContractRead from '../../hooks/useContractRead';
 import useContractWrite from '../../hooks/useContractWrite';
 import CustomAlert from '../customAlert/CustomAlert';
-import styles from "./ConfessionsList.module.css";
+import styles from "./ConfessionUi.module.css";
 
 interface Confession {
     id: string | number;

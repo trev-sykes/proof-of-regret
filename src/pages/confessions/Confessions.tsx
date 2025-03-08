@@ -1,5 +1,4 @@
-import ConfessionsList from "../../components/confessionsList/ConfessionsList"
-import Navigation from "../../components/navigation/Navigation";
+import ConfessionsList from "../../components/confessionUi/ConfessionUi"
 import TransitionLayout from "../../components/transitionLayout/TransitionLayout";
 interface ConfessionsProps {
     setPaths: any;
@@ -7,7 +6,6 @@ interface ConfessionsProps {
 const Confessions: React.FC<ConfessionsProps> = () => {
     return (
         <TransitionLayout>
-            <Navigation />
             <ConfessionsList />
         </TransitionLayout>
     )

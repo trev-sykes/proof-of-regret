@@ -5,6 +5,7 @@ import TransitionLayout from "./components/transitionLayout/TransitionLayout"
 import Confessions from "./pages/confessions/Confessions";
 import Docs from "./pages/docs/Docs";
 import { usePathnameStore } from "../src/store/usePathnameStore"
+import Navigation from "./components/navigation/Navigation";
 { }
 function App() {
   const { setPaths, currentPath } = usePathnameStore();
@@ -12,6 +13,7 @@ function App() {
     <div>
       <Router>
         <TransitionLayout>
+          <Navigation />
           <Routes>
             <Route path={"/"} element={<Home setPaths={setPaths} currentPath={currentPath} />} />
             <Route path={"/confess"} element={<Confess setPaths={setPaths} />} />

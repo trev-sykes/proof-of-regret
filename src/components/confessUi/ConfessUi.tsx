@@ -4,7 +4,7 @@ import CustomAlert from "../customAlert/CustomAlert";
 import useContractWrite from "../../hooks/useContractWrite";
 import Swal from 'sweetalert2';
 import { useForm } from "../../hooks/useForm";
-import styles from "./ConfessionMain.module.css";
+import styles from "./ConfessUi.module.css";
 
 // Spinner for that loading drip
 const Spinner = () => {

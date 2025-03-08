@@ -14,8 +14,6 @@ const Loading: React.FC<LoadingProps> = ({ loadingStyle }) => {
     return (
         <div className={styles.loading}>
             <div className={styles.hands} style={loadingStyle}>
-                {/* Optional: Add content if intended */}
-                {/* <p>🙌</p> */}
             </div>
         </div>
     );

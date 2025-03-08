@@ -36,7 +36,10 @@ export default function useContractRead() {
     }, []);
     const contractConfessionCountRef = useRef(false);
     const getConfessionCount = async () => {
-        if (contractConfessionCountRef.current) return;
+        if (contractConfessionCountRef.current) {
+            console.log(`Nothing to Update.`);
+            return;
+        };
         contractConfessionCountRef.current = true;
         try {
             const provider = new ethers.JsonRpcProvider(rpcUrl, {
