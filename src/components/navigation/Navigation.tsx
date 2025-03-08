@@ -7,7 +7,6 @@ import styles from './Navigation.module.css';
 import useContractWrite from '../../hooks/useContractWrite';
 
 const Navigation: React.FC = () => {
-    const [docsHovered, setDocsHovered] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const { currentPath, previousPath, setPaths } = usePathnameStore();
@@ -39,9 +38,6 @@ const Navigation: React.FC = () => {
         setPaths(location.pathname);
     }, [location, setPaths]);
 
-    const handleDocsHover = (hovered: boolean) => {
-        setDocsHovered(hovered);
-    };
 
 
     return (
@@ -56,8 +52,6 @@ const Navigation: React.FC = () => {
                 {currentPath === '/docs' && (
                     <div
                         className={styles.documentButton}
-                        onMouseEnter={() => handleDocsHover(true)}
-                        onMouseLeave={() => handleDocsHover(false)}
                         onClick={() => navigate(previousPath && previousPath !== '/docs' ? previousPath : '/')}
                     >
                         <ChevronLeft
@@ -72,8 +66,7 @@ const Navigation: React.FC = () => {
             <div className={styles.rightContainer}>
                 <div
                     className={styles.documentLinkContainer}
-                    onMouseEnter={() => handleDocsHover(true)}
-                    onMouseLeave={() => handleDocsHover(false)}
+
                 >
                     <Link to="/docs" className={styles.documentButton}>
                         <FileText size={18} />

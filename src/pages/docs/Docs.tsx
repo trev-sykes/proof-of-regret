@@ -1,13 +1,8 @@
-import React, { useEffect } from 'react';
 import styles from './Docs.module.css';
-import { StepBack } from 'lucide-react';
-import { useNavigate } from 'react-router';
-import { usePathnameStore } from "../../store/usePathnameStore";
-interface DocsProps {
-    setPaths: any;
-}
-const Docs: React.FC<DocsProps> = ({ setPaths }) => {
 
+interface DocsProps {
+}
+const Docs: React.FC<DocsProps> = () => {
     return (
         <div className={styles.container}>
             <div className={styles.docsContainer}>
