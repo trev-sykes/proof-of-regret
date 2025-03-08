@@ -23,7 +23,7 @@ function App() {
             <Route path={"/"} element={<Home setPaths={setPaths} currentPath={currentPath} />} />
             <Route path={"/confess"} element={<Confess setPaths={setPaths} />} />
             <Route path={"/confessions"} element={<Confessions setPaths={setPaths} />} />
-            <Route path={"/docs"} element={<Docs setPaths={setPaths} />} />
+            <Route path={"/docs"} element={<Docs />} />
           </Routes >
         </TransitionLayout>
       </Router>
