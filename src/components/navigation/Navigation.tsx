@@ -5,8 +5,12 @@ import Blockies from 'react-blockies';
 import { usePathnameStore } from '../../store/usePathnameStore';
 import styles from './Navigation.module.css';
 import useContractWrite from '../../hooks/useContractWrite';
+import useAlert from '../../hooks/useAlert';
+import Alert from '../alert/Alert';
 
 const Navigation: React.FC = () => {
+    const { alertStatus, showAlert } = useAlert();
+
     const navigate = useNavigate();
     const location = useLocation();
     const { currentPath, previousPath, setPaths } = usePathnameStore();
@@ -25,6 +29,7 @@ const Navigation: React.FC = () => {
         try {
             await getSigner();
         } catch (error) {
+            showAlert('error', 'Try downloading Metamask');
             console.error("Failed to connect wallet:", error);
         }
     };
@@ -42,6 +47,9 @@ const Navigation: React.FC = () => {
 
     return (
         <nav className={styles.navigation}>
+            {alertStatus.isVisible && (
+                <Alert type={alertStatus.type} message={alertStatus.message} onClose={() => showAlert(null, '')} />
+            )}
             <div className={styles.leftContainer}>
                 {currentPath !== '/' && currentPath !== '/docs' && (
                     <Link to="/" className={styles.homeButton}>

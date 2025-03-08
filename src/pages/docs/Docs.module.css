@@ -1,6 +1,7 @@
 .container {
     width: 100%;
     min-height: 100vh;
+    margin-top: 70px;
     display: flex;
     flex-direction: column;
     align-items: center;
