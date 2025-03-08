@@ -6,9 +6,14 @@ import Confessions from "./pages/confessions/Confessions";
 import Docs from "./pages/docs/Docs";
 import { usePathnameStore } from "../src/store/usePathnameStore"
 import Navigation from "./components/navigation/Navigation";
-{ }
+import { useInternetCheck } from "./hooks/useInternetCheck";
+import Offline from "./components/offline/Offline";
+
 function App() {
+  const onLine = useInternetCheck();
+
   const { setPaths, currentPath } = usePathnameStore();
+  if (!onLine) return <Offline />
   return (
     <div>
       <Router>

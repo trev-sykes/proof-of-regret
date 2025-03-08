@@ -34,9 +34,9 @@ const ConfessionMain: React.FC = () => {
     const getUserFriendlyError = (reason: any) => {
         switch (reason) {
             case 'MustSendExactly0_001ETH':
-                return 'Yo, send exactly 0.001 ETH to confess.';
+                return 'Send exactly 0.001 ETH to confess.';
             case 'ConfessionAlreadyResolved':
-                return 'This confession’s already done, fam.';
+                return 'This confession’s resolved.';
             case 'MaximumForgivesReached':
                 return 'You’ve already forgiven this one.';
             default:
@@ -52,21 +52,20 @@ const ConfessionMain: React.FC = () => {
             text: 'Dropping 0.001 ETH to confess—cool?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Hell Yeah, Confess',
+            confirmButtonText: 'Yes, Confess',
         });
 
         if (result.isConfirmed) {
             setIsConfessing(true);
             try {
-                showAlert('pending', 'Confession’s cooking...');
+                showAlert('pending', 'Sending confession');
                 await handleConfession(confession);
-                // Clear the input (assuming useForm handles this right)
                 handleInputChange('confess')({ target: { value: '' } });
                 showAlert('success', 'Confession dropped! You’re good.');
             } catch (err: any) {
                 const reason = err.reason || err.message;
-                const chillError = getUserFriendlyError(reason);
-                showAlert('error', chillError);
+                const error = getUserFriendlyError(reason);
+                showAlert('error', error);
             } finally {
                 setIsConfessing(false);
             }

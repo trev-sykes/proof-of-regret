@@ -1,4 +1,4 @@
-import styles from "./CustomAlert.module.css";
+import styles from "./Alert.module.css";
 import { X } from "lucide-react";
 import { PuffLoader } from "react-spinners";
 import { motion } from "framer-motion";

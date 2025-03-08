@@ -7,15 +7,9 @@ interface DocsProps {
     setPaths: any;
 }
 const Docs: React.FC<DocsProps> = ({ setPaths }) => {
-    useEffect(() => {
-        setPaths('/docs');
-    }, []);
-    const navigate = useNavigate();
-    const { previousPath, currentPath } = usePathnameStore();
-    console.log("previousPath", previousPath, "currentPath", currentPath);
+
     return (
         <div className={styles.container}>
-            <StepBack className={styles.back} onClick={() => navigate(previousPath ? previousPath : '/')} />
             <div className={styles.docsContainer}>
                 <h1 className={styles.title}>Proof of Regret:</h1>
                 <p className={styles.subtitle}>

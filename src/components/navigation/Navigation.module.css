@@ -66,15 +66,10 @@
 }
 
 .back {
-    color: #ff007a;
+    color: #ffffff;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-.back:hover {
-    color: #ff4d4d;
-    transform: translateX(-3px);
-}
 
 /* Documentation button */
 .documentLinkContainer {

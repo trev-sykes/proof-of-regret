@@ -43,25 +43,29 @@ const Navigation: React.FC = () => {
         setDocsHovered(hovered);
     };
 
-    const handleGoBack = () => {
-        navigate(previousPath || '/');
-    };
 
     return (
         <nav className={styles.navigation}>
             <div className={styles.leftContainer}>
-                {currentPath !== '/' && (
+                {currentPath !== '/' && currentPath !== '/docs' && (
                     <Link to="/" className={styles.homeButton}>
                         <Home size={18} />
                         <span>Home</span>
                     </Link>
                 )}
                 {currentPath === '/docs' && (
-                    <ChevronLeft
-                        className={styles.back}
-                        onClick={handleGoBack}
-                        size={24}
-                    />
+                    <div
+                        className={styles.documentButton}
+                        onMouseEnter={() => handleDocsHover(true)}
+                        onMouseLeave={() => handleDocsHover(false)}
+                        onClick={() => navigate(previousPath && previousPath !== '/docs' ? previousPath : '/')}
+                    >
+                        <ChevronLeft
+                            className={styles.back}
+                            size={18}
+                        />
+                        <span>Back</span>
+                    </div>
                 )}
             </div>
 
@@ -76,16 +80,6 @@ const Navigation: React.FC = () => {
                         <span>Docs</span>
                     </Link>
                 </div>
-
-                <div
-                    className={styles.underline}
-                    style={{
-                        transform: docsHovered
-                            ? 'translateY(-25px) translateX(-70px)'
-                            : 'translateY(-25px) translateX(0)'
-                    }}
-                />
-
                 <div className={styles.connectButtonContainer}>
                     {!isConnected ? (
                         <div className={styles.connectButton} onClick={handleSignin}>
