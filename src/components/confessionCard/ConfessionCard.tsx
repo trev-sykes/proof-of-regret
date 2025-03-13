@@ -15,9 +15,9 @@ interface ConfessionCardProps {
 
 const ConfessionCard: React.FC<ConfessionCardProps> = React.memo(({ signerAddress, confession, type, resolve, forgive }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const isUserConfessor = confession.confessor.toLowerCase() === signerAddress.toLowerCase();
+    const isUserConfessor = confession.confessor == signerAddress;
     const hasUserForgiven = confession.forgivers.some(
-        (address: string) => address.toLowerCase() === signerAddress.toLowerCase()
+        (address: string) => address == signerAddress
     );
     const forgiveCount = confession.forgivers.length;
     const isResolved = confession.resolved;

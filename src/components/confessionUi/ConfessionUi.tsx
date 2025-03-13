@@ -41,8 +41,8 @@ const ConfessionsUI: React.FC = () => {
         try {
             // Only get signer if we don't have it yet
             if (!signerAddress) {
-                const address = await getSigner();
-                setSignerAddress(address);
+                const address: any = await getSigner();
+                setSignerAddress(address.address);
             }
 
             const count = await getConfessionCount();
