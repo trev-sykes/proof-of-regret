@@ -9,7 +9,7 @@ import useAlert from '../../hooks/useAlert';
 import Alert from '../alert/Alert';
 import WalletSelector from '../walletSelector/WalletSelector';
 import useWalletStore from '../../store/useWalletStore';
-import useProviderStore from '../../store/useProviderAndSIgnerStore';
+import useProviderStore from '../../store/useProviderAndSignerStore';
 
 const Navigation: React.FC = () => {
     const { availableWallets, activeWallet, detectWallets, setWallet } = useWalletStore();

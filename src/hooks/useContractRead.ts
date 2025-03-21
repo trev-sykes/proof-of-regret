@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import proofOfRegret from "../contracts/ProofOfRegret";
 import { ethers } from "ethers";
-import useProviderStore from "../store/useProviderAndSIgnerStore";
+import useProviderStore from "../store/useProviderAndSignerStore";
 export default function useContractRead() {
 
     const { provider } = useProviderStore();

@@ -1,6 +1,6 @@
 import proofOfRegret from "../contracts/ProofOfRegret";
 import { ethers } from "ethers";
-import useProviderStore from "../store/useProviderAndSIgnerStore";
+import useProviderStore from "../store/useProviderAndSignerStore";
 
 export default function useContractWrite() {
     const { signer } = useProviderStore();

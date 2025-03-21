@@ -8,7 +8,7 @@ import { usePathnameStore } from "../src/store/usePathnameStore";
 import Navigation from "./components/navigation/Navigation";
 import { useInternetCheck } from "./hooks/useInternetCheck";
 import Offline from "./components/offline/Offline";
-import useProviderStore from "./store/useProviderAndSIgnerStore";
+import useProviderStore from "./store/useProviderAndSignerStore";
 import { useEffect } from "react";
 
 function App() {
