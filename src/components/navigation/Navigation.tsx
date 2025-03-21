@@ -39,7 +39,6 @@ const Navigation: React.FC = () => {
         try {
             await detectWallets();
             await setWallet(walletName);
-            await connectProvider(); // First connect provider
             await connectSigner(); // Then connect signer
             setIsWalletSelectorOpen(false);
         } catch (error: any) {

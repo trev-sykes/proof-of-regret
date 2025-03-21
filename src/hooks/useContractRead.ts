@@ -1,10 +1,9 @@
 import { useCallback, useRef, useState } from "react";
 import proofOfRegret from "../contracts/ProofOfRegret";
 import { ethers } from "ethers";
-import useProviderStore from "../store/useProviderAndSignerStore";
+import useProviderAndSignerStore from "../store/useProviderAndSignerStore";
 export default function useContractRead() {
-
-    const { provider } = useProviderStore();
+    const { provider } = useProviderAndSignerStore();
     const [contractInformation, setContractInformation] = useState({
         totalConfessions: 0,
     })
