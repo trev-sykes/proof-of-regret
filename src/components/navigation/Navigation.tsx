@@ -13,7 +13,7 @@ import useProviderStore from '../../store/useProviderAndSignerStore';
 
 const Navigation: React.FC = () => {
     const { availableWallets, activeWallet, detectWallets, setWallet } = useWalletStore();
-    const { signer, signerAddress, connectProvider, connectSigner, disconnect } = useProviderStore();
+    const { signer, signerAddress, connectSigner, disconnect } = useProviderStore();
     const { alertStatus, showAlert } = useAlert();
     const navigate = useNavigate();
     const location = useLocation();

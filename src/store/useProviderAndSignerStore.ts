@@ -12,7 +12,7 @@ interface ProviderState {
 }
 
 const rpcUrl = import.meta.env.VITE_INFURA_RPC_URL;
-const useProviderStore = create<ProviderState>((set, get) => ({
+const useProviderStore = create<ProviderState>((set) => ({
     provider: null,
     signer: null,
     signerAddress: "",
