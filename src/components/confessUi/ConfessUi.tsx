@@ -1,69 +1,65 @@
 import React, { useState, useEffect } from 'react';
-import useAlert from "../../hooks/useAlert";
-import CustomAlert from "../alert/Alert";
-import useContractWrite from "../../hooks/useContractWrite";
+import useAlert from '../../hooks/useAlert';
+import CustomAlert from '../alert/Alert';
+import useContractWrite from '../../hooks/useContractWrite';
 import Swal from 'sweetalert2';
-import { useForm } from "../../hooks/useForm";
-import styles from "./ConfessUi.module.css";
+import { useForm } from '../../hooks/useForm';
+import styles from './ConfessUi.module.css';
 
-// Spinner for that loading drip
-const Spinner = () => {
-    return <div className={styles.spinner}></div>;
-};
-interface CharacterLimitAlertProps {
-    message: any;
-}
-// Styled alert for character limits
-const CharacterLimitAlert: React.FC<CharacterLimitAlertProps> = ({ message }) => {
-    return <div className={styles.alert}>{message}</div>;
-};
+// Spinner for loading flair
+const Spinner = () => <div className={styles.spinner}></div>;
+
+// Character limit alert
+interface CharacterLimitAlertProps { message: string; }
+const CharacterLimitAlert: React.FC<CharacterLimitAlertProps> = ({ message }) => (
+    <div className={styles.alert}>{message}</div>
+);
 
 const ConfessionMain: React.FC = () => {
     const { alertStatus, showAlert } = useAlert();
     const { handleConfession } = useContractWrite();
-    const { formInputs, handleInputChange } = useForm({ confess: '' });
+    const { formInputs, handleInputChange } = useForm({ confess: '', tweetUrl: '' });
     const [isConfessing, setIsConfessing] = useState(false);
 
-    // Fade-in effect on mount
+    // Fade-in on mount
     useEffect(() => {
         const container = document.querySelector(`.${styles.container}`);
         if (container) container.classList.add(styles.mounted);
     }, []);
 
-    // Make errors chill for users
-    const getUserFriendlyError = (reason: any) => {
+    // User-friendly error messages
+    const getUserFriendlyError = (reason: string) => {
         switch (reason) {
-            case 'MustSendExactly0_001ETH':
-                return 'Send exactly 0.001 ETH to confess.';
-            case 'ConfessionAlreadyResolved':
-                return 'This confession’s resolved.';
-            case 'MaximumForgivesReached':
-                return 'You’ve already forgiven this one.';
-            default:
-                return `Shit went sideways: ${reason}`;
+            case 'WrongConfessionAmount': return 'Send exactly 0.001 ETH to confess.';
+            case 'ConfessionTooLong': return 'Keep it under 280 characters.';
+            case 'AlreadyResolved': return 'This one’s done, fam.';
+            case 'MaxForgivesReached': return 'You’ve already forgiven this.';
+            default: return `Oops, something broke: ${reason}`;
         }
     };
 
-    // Handle the confession flow
+    // Confession handler with X integration
     const confess = async () => {
-        const confession = formInputs.confess;
+        const { confess } = formInputs;
         const result = await Swal.fire({
-            title: 'Confirm confession',
-            text: 'Dropping 0.001 ETH to confess—cool?',
+            title: 'Confirm Your Confession',
+            html: 'Dropping 0.001 ETH and linking your X post—ready?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, Confess',
+            cancelButtonText: 'Nah',
         });
 
         if (result.isConfirmed) {
             setIsConfessing(true);
             try {
-                showAlert('pending', 'Sending confession');
-                await handleConfession(confession);
+                showAlert('pending', 'Posting confession...');
+                await handleConfession(confess); // Pass tweetUrl to contract
                 handleInputChange('confess')({ target: { value: '' } });
-                showAlert('success', 'Confession dropped! You’re good.');
+                handleInputChange('tweetUrl')({ target: { value: '' } });
+                showAlert('success', 'Confession live on-chain! Check it out.');
             } catch (err: any) {
-                const reason = err.reason || err.message;
+                const reason = err.reason || err.message || 'Unknown error';
                 const error = getUserFriendlyError(reason);
                 showAlert('error', error);
             } finally {
@@ -77,7 +73,7 @@ const ConfessionMain: React.FC = () => {
 
     return (
         <section className={styles.container}>
-            {alertStatus && alertStatus.isVisible && alertStatus.type != null && (
+            {alertStatus?.isVisible && alertStatus.type && (
                 <CustomAlert
                     type={alertStatus.type}
                     message={alertStatus.message}
@@ -93,9 +89,9 @@ const ConfessionMain: React.FC = () => {
                         id="confession"
                         value={formInputs.confess}
                         onChange={handleInputChange('confess')}
-                        placeholder="Drop your deepest regret..."
+                        placeholder="Drop your regret here..."
                         className={styles.textarea}
-                        aria-label="Your confession goes here"
+                        aria-label="Your confession"
                     />
                     <div className={`${styles.characterCount} ${confessionLength < 20 ? styles.tooShort :
                         confessionLength > 280 ? styles.tooLong :
@@ -104,14 +100,17 @@ const ConfessionMain: React.FC = () => {
                         {confessionLength}/280
                     </div>
                     {formInputs.confess && confessionLength < 20 && (
-                        <CharacterLimitAlert message="20 characters minimum!" />
+                        <CharacterLimitAlert message="Minimum 20 characters!" />
+                    )}
+                    {formInputs.tweetUrl && (
+                        <CharacterLimitAlert message="Invalid X URL—needs to be a post!" />
                     )}
                 </div>
                 <button
                     type="button"
                     onClick={confess}
-                    disabled={!formInputs.confess || !isValidLength || isConfessing}
-                    className={`${styles.button} ${!formInputs.confess || !isValidLength || isConfessing ? styles.disabled : styles.active
+                    disabled={!isValidLength || isConfessing}
+                    className={`${styles.button} ${!isValidLength || isConfessing ? styles.disabled : styles.active
                         }`}
                 >
                     {isConfessing ? <Spinner /> : 'Confess'}

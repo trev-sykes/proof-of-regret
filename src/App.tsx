@@ -1,17 +1,22 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
-import Home from "./pages/home/Home"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./pages/home/Home";
 import Confess from "./pages/confess/Confess";
-import TransitionLayout from "./components/transitionLayout/TransitionLayout"
+import TransitionLayout from "./components/transitionLayout/TransitionLayout";
 import Confessions from "./pages/confessions/Confessions";
 import Docs from "./pages/docs/Docs";
-import { usePathnameStore } from "../src/store/usePathnameStore"
+import { usePathnameStore } from "../src/store/usePathnameStore";
 import Navigation from "./components/navigation/Navigation";
 import { useInternetCheck } from "./hooks/useInternetCheck";
 import Offline from "./components/offline/Offline";
+import useProviderStore from "./store/useProviderAndSIgnerStore";
+import { useEffect } from "react";
 
 function App() {
+  const { connectProvider } = useProviderStore();
+  useEffect(() => {
+    connectProvider();
+  }, []);
   const onLine = useInternetCheck();
-
   const { setPaths, currentPath } = usePathnameStore();
   if (!onLine) return <Offline />
   return (

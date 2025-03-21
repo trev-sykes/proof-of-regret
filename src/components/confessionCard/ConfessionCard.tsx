@@ -6,7 +6,7 @@ import styles from "./ConfessionCard.module.css"
 
 // Memoized ConfessionCard component with expandable text
 interface ConfessionCardProps {
-    signerAddress: any;
+    signerAddress?: any;
     confession: any;
     type: 'active' | 'inactive' | 'forgiven' | 'unforgiven' | 'ready-for-resolve';
     resolve: Function;

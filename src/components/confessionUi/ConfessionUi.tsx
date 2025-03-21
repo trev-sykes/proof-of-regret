@@ -24,7 +24,6 @@ type SectionType = 'active' | 'readyToResolve' | 'forgiven' | 'unforgiven' | 'al
 
 const ConfessionsUI: React.FC = () => {
     // State variables for managing component data
-    const [signerAddress, setSignerAddress] = useState<string>('');
     const [confessions, setConfessions] = useState<Confession[]>([]);
     const [showMyConfessions, setShowMyConfessions] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -33,22 +32,14 @@ const ConfessionsUI: React.FC = () => {
 
     // Custom hooks for contract interaction and alerts
     const { getConfessionCount, getConfession } = useContractRead();
-    const { getSigner, handleForgive, handleResolve } = useContractWrite();
+    const { handleForgive, handleResolve } = useContractWrite();
     const { alertStatus, showAlert } = useAlert();
 
     // Fetch confession data from the smart contract in parallel
     const fetchData = useCallback(async () => {
         try {
-            // Only get signer if we don't have it yet
-            if (!signerAddress) {
-                const address: any = await getSigner();
-                setSignerAddress(address.address);
-            }
-
             const count = await getConfessionCount();
             console.log("Confession count:", count);
-
-            // Handle different types for count
             let countNumber: number;
             if (typeof count === 'bigint') {
                 countNumber = Number(count);
@@ -100,7 +91,7 @@ const ConfessionsUI: React.FC = () => {
             setIsLoading(false);
             setHasInitialized(true);
         }
-    }, [getSigner, getConfessionCount, getConfession, signerAddress]);
+    }, [getConfessionCount, getConfession]);
 
     // Load data on component mount only once
     useEffect(() => {
@@ -189,9 +180,10 @@ const ConfessionsUI: React.FC = () => {
     };
 
     // Filter confessions based on user preference
-    const filteredConfessions = showMyConfessions && signerAddress
-        ? confessions.filter(c => c.confessor.toLowerCase() === signerAddress.toLowerCase())
-        : confessions;
+    // const filteredConfessions = showMyConfessions && signer && signer.address
+    //     ? confessions.filter(c => c.confessor.toLowerCase() === signer.address.toLowerCase())
+    //     : confessions;
+    const filteredConfessions = confessions;
 
     // Handle refresh button click
     const handleRefresh = () => {
@@ -269,7 +261,6 @@ const ConfessionsUI: React.FC = () => {
                                 key={`${sectionType}-${index}`}
                                 confession={confession}
                                 type={cardType}
-                                signerAddress={signerAddress}
                                 resolve={resolve}
                                 forgive={forgive}
                             />

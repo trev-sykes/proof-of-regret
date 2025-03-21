@@ -1,7 +1,10 @@
 import { useCallback, useRef, useState } from "react";
 import proofOfRegret from "../contracts/ProofOfRegret";
 import { ethers } from "ethers";
+import useProviderStore from "../store/useProviderAndSIgnerStore";
 export default function useContractRead() {
+
+    const { provider } = useProviderStore();
     const [contractInformation, setContractInformation] = useState({
         totalConfessions: 0,
     })
@@ -10,18 +13,13 @@ export default function useContractRead() {
         throw new Error('RPC URL not configured. Please check your environment variables.');
     }
     const refreshProtocolState = useCallback(async () => {
+        if (!provider) return;
+        const contract = new ethers.Contract(
+            proofOfRegret.contractAddress,
+            proofOfRegret.contractABI,
+            provider
+        );
         try {
-            const provider = new ethers.JsonRpcProvider(rpcUrl, {
-                name: 'https://sepolia-rollup.arbitrum.io/rpc',
-                chainId: 421614
-            })
-            await provider.ready;
-            const contract = new ethers.Contract(
-                proofOfRegret.contractAddress,
-                proofOfRegret.contractABI,
-                provider
-            );
-
             const [confessionCountResponse] = await Promise.all(
                 [contract.confessionCount()]
             );
@@ -36,22 +34,18 @@ export default function useContractRead() {
     }, []);
     const contractConfessionCountRef = useRef(false);
     const getConfessionCount = async () => {
+        if (!provider) return;
         if (contractConfessionCountRef.current) {
             console.log(`Nothing to Update.`);
             return;
         };
         contractConfessionCountRef.current = true;
+        const contract = new ethers.Contract(
+            proofOfRegret.contractAddress,
+            proofOfRegret.contractABI,
+            provider
+        );
         try {
-            const provider = new ethers.JsonRpcProvider(rpcUrl, {
-                name: 'https://sepolia-rollup.arbitrum.io/rpc',
-                chainId: 421614
-            })
-            await provider.ready;
-            const contract = new ethers.Contract(
-                proofOfRegret.contractAddress,
-                proofOfRegret.contractABI,
-                provider
-            );
             const response = await contract.confessionCount();
             if (response)
                 return response;
@@ -61,10 +55,7 @@ export default function useContractRead() {
 
     }
     const getConfession = async (id: string) => {
-        const provider = new ethers.JsonRpcProvider(rpcUrl, {
-            name: 'https://sepolia-rollup.arbitrum.io/rpc',
-            chainId: 421614
-        });
+        if (!provider) return;
         const contract = new ethers.Contract(proofOfRegret.contractAddress, proofOfRegret.contractABI, provider);
         try {
             const response = await contract.getConfession(id);

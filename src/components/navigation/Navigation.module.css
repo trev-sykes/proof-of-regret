@@ -124,6 +124,11 @@
 /* Connect wallet section */
 .connectButtonContainer {
     z-index: 100;
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-between;
 }
 
 .connectButton {
@@ -282,4 +287,24 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
+    .logo {
+        display: none;
+    }
+}
+
+.coinbaseWalletIcon {
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: none;
+    box-shadow: 0 0 10px rgba(255, 0, 122, 0.3);
+}
+
+.foundWalletIcon {
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 1px solid rgba(255, 0, 122, 0.6);
+    box-shadow: 0 0 10px rgba(255, 0, 122, 0.3);
 }

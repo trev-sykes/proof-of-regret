@@ -1,8 +1,8 @@
-// WalletSelector.tsx
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
+import { BeatLoader } from 'react-spinners';
 import styles from './WalletSelector.module.css';
-import { detectWallets, WalletInfo } from '../../utils/walletUtils';
+import useWalletStore from "../../store/useWalletStore";
 
 interface WalletSelectorProps {
     isOpen: boolean;
@@ -11,21 +11,34 @@ interface WalletSelectorProps {
 }
 
 const WalletSelector: React.FC<WalletSelectorProps> = ({ isOpen, onClose, onSelectWallet }) => {
-    const [availableWallets, setAvailableWallets] = useState<WalletInfo[]>([]);
+    const { detectWallets, availableWallets } = useWalletStore();
+
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (isOpen) {
-            // Only detect wallets when the modal is opened
-            const wallets = detectWallets();
-            setAvailableWallets(wallets);
+            setLoading(true);
+            const handleGetWallets = async () => {
+                try {
+                    const wallets = await detectWallets();
+                    console.log("Wallets: ", wallets);
+                } catch (err: any) {
+                    console.error(`Error getting wallets `, err.message);
+                }
+            }
+            if (availableWallets.length == 0) {
+                handleGetWallets();
+                setTimeout(() => {
+                    setLoading(false);
+                }, 2000);
+            } else {
+                setLoading(false);
+            }
+
         }
     }, [isOpen]);
 
     if (!isOpen) return null;
-
-    // Group wallets by installed status
-    const installedWallets = availableWallets.filter(wallet => wallet.installed);
-    const otherWallets = availableWallets.filter(wallet => !wallet.installed);
 
     return (
         <div className={styles.overlay}>
@@ -37,40 +50,34 @@ const WalletSelector: React.FC<WalletSelectorProps> = ({ isOpen, onClose, onSele
                     </button>
                 </div>
 
-                {installedWallets.length > 0 && (
+                {loading ? (
+                    <div className={styles.loadingContainer}>
+                        <div className={styles.loading}>Loading wallets...</div>
+                        <BeatLoader />
+                    </div>
+                ) : (
                     <>
-                        <h3 className={styles.sectionTitle}>Installed Wallets</h3>
-                        <div className={styles.walletList}>
-                            {installedWallets.map(wallet => (
-                                <button
-                                    key={wallet.id}
-                                    className={styles.walletOption}
-                                    onClick={() => onSelectWallet(wallet.id)}
-                                >
-                                    <span className={styles.walletIcon}>{wallet.icon}</span>
-                                    <span className={styles.walletName}>{wallet.name}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </>
-                )}
+                        {availableWallets.length > 0 && (
+                            <>
+                                <h3 className={styles.sectionTitle}>Installed Wallets</h3>
+                                <div className={styles.walletList}>
+                                    {availableWallets.map((wallet: any) => {
 
-                {otherWallets.length > 0 && (
-                    <>
-                        <h3 className={styles.sectionTitle}>Other Options</h3>
-                        <div className={styles.walletList}>
-                            {otherWallets.map(wallet => (
-                                <button
-                                    key={wallet.id}
-                                    className={`${styles.walletOption} ${styles.notInstalled}`}
-                                    onClick={() => onSelectWallet(wallet.id)}
-                                >
-                                    <span className={styles.walletIcon}>{wallet.icon}</span>
-                                    <span className={styles.walletName}>{wallet.name}</span>
-                                    <span className={styles.installLabel}>Not supported</span>
-                                </button>
-                            ))}
-                        </div>
+                                        const { info } = wallet;
+                                        return (
+                                            <button
+                                                key={info.uuid}
+                                                className={styles.walletOption}
+                                                onClick={() => onSelectWallet(info.name)}
+                                            >
+                                                <img className={styles.walletIcon} src={info ? info.icon : ''} alt="wallet" />
+                                                <span className={styles.walletName}>{info.name}</span>
+                                            </button>
+                                        )
+                                    })}
+                                </div>
+                            </>
+                        )}
                     </>
                 )}
             </div>
