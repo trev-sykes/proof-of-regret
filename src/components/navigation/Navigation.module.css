@@ -233,8 +233,19 @@
     z-index: 99;
 }
 
+.walletInfoContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .logo {
+        display: none;
+    }
+
     .navigation {
         padding: 0 15px;
         height: 60px;
@@ -267,6 +278,9 @@
 }
 
 @media (max-width: 480px) {
+    .logo {
+        display: none;
+    }
 
     .homeButton,
     .documentButton {

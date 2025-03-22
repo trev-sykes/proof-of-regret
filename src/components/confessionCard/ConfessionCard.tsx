@@ -25,7 +25,6 @@ const ConfessionCard: React.FC<ConfessionCardProps> = React.memo(({ signerAddres
     const toggleExpand = () => setIsExpanded(!isExpanded);
     // Utility function to shorten Ethereum addresses
     const shortenAddress = (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`;
-
     return (
         <article className={styles.card}>
             <header className={styles.cardHeader}>
@@ -77,7 +76,7 @@ const ConfessionCard: React.FC<ConfessionCardProps> = React.memo(({ signerAddres
                         </span>
                     </div>
                     <div className={styles.actionButtons}>
-                        {!isUserConfessor && !hasUserForgiven && type !== 'forgiven' && type != 'ready-for-resolve' && type != 'unforgiven' && (
+                        {!isUserConfessor && !hasUserForgiven && type !== 'forgiven' && type != 'ready-for-resolve' && type != 'unforgiven' && signerAddress != '' && (
                             <button
                                 onClick={() => forgive(confession.id)}
                                 className={styles.forgiveButton}
@@ -86,7 +85,7 @@ const ConfessionCard: React.FC<ConfessionCardProps> = React.memo(({ signerAddres
                                 Forgive
                             </button>
                         )}
-                        {type == 'ready-for-resolve' && !isResolved && (
+                        {type == 'ready-for-resolve' && !isResolved && signerAddress != '' ? (
                             <button
                                 onClick={() => resolve(confession.id)}
                                 className={styles.resolveButton}
@@ -94,6 +93,8 @@ const ConfessionCard: React.FC<ConfessionCardProps> = React.memo(({ signerAddres
                             >
                                 Resolve
                             </button>
+                        ) : type == 'ready-for-resolve' && !isResolved && (
+                            <div className="animationButton">Connect Wallet</div>
                         )}
                         {hasUserForgiven && type != 'unforgiven' && type != 'ready-for-resolve' && <span className={styles.statusTag}>You Forgave</span>}
                         {isUserConfessor && type != 'ready-for-resolve' && type != 'unforgiven' && < span className={styles.statusTag}>Your Confession</span>}

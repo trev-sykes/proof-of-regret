@@ -7,6 +7,8 @@ import useContractRead from '../../hooks/useContractRead';
 import useContractWrite from '../../hooks/useContractWrite';
 import CustomAlert from '../alert/Alert';
 import styles from "./ConfessionUi.module.css";
+import "../../index.css";
+import useProviderStore from '../../store/useProviderAndSignerStore';
 
 interface Confession {
     id: string | number;
@@ -33,6 +35,7 @@ const ConfessionsUI: React.FC = () => {
     // Custom hooks for contract interaction and alerts
     const { getConfessionCount, getConfession } = useContractRead();
     const { handleForgive, handleResolve } = useContractWrite();
+    const { signer } = useProviderStore();
     const { alertStatus, showAlert } = useAlert();
 
     // Fetch confession data from the smart contract in parallel
@@ -259,6 +262,7 @@ const ConfessionsUI: React.FC = () => {
                         {sectionConfessions.map((confession, index) => (
                             <ConfessionCard
                                 key={`${sectionType}-${index}`}
+                                signerAddress={signer ? signer.address : ""}
                                 confession={confession}
                                 type={cardType}
                                 resolve={resolve}
@@ -299,7 +303,7 @@ const ConfessionsUI: React.FC = () => {
                 </label>
                 <button
                     onClick={handleRefresh}
-                    className={styles.refreshButton}
+                    className="animationButton"
                 >
                     Refresh
                 </button>

@@ -125,7 +125,7 @@ const WalletInfo: React.FC<{
     const walletData = availableWallets.find((w) => w.info.name === activeWallet);
 
     return (
-        <>
+        <div className={styles.walletInfoContainer}>
             {walletData ? (
                 <img
                     className={activeWallet === 'Coinbase Wallet' ? styles.coinbaseWalletIcon : styles.foundWalletIcon}
@@ -147,7 +147,7 @@ const WalletInfo: React.FC<{
                     <LogOut size={18} />
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
