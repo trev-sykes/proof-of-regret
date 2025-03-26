@@ -14,8 +14,8 @@ const Home: React.FC = () => {
                     <div className={styles.titleContainer}>
                         <h1 className={styles.title}>Rug Your Regret</h1>
                         <div className={styles.buttonContainer}>
-                            <Link to="/confess" className={styles.button}>Submit Regret</Link>
-                            <Link to="/confessions" className={styles.button}>View Regrets</Link>
+                            <Link to="/confess" className="buttonMain">Submit Regret</Link>
+                            <Link to="/confessions" className="buttonMain">View Regrets</Link>
                         </div>
                     </div>
                 </div>

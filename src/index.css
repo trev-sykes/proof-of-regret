@@ -1,35 +1,92 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   line-height: 1.5;
   font-weight: 400;
-  color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Shared Button Variables */
+  --button-color: #ffffff;
+  --button-border: none;
+  --button-font-weight: 700;
+  --button-text-transform: uppercase;
+  --button-letter-spacing: 1.5px;
+  --button-text-decoration: none;
+
+  /* Main Button Variables */
+  --button-main-bg: linear-gradient(45deg, #ff007a, #ff4d4d);
+  --button-main-bg-hover: linear-gradient(45deg, #ff4d4d, #ff007a);
+  --button-main-font-size: 1.3rem;
+  --button-main-padding: 15px 30px;
+  --button-main-radius: 10px;
+  --button-main-shadow: 0 4px 15px rgba(255, 0, 122, 0.5);
+  --button-main-shadow-hover: 0 6px 20px rgba(255, 0, 122, 0.8);
+  --button-main-shadow-active: 0 2px 10px rgba(255, 0, 122, 0.3);
+  --button-main-transition: all 0.3s ease;
+  --button-main-scale-hover: scale(1.05);
+  --button-main-scale-active: scale(0.95);
+
+  /* Animation Button Variables */
+  --button-animation-bg: linear-gradient(45deg, #7d00ff, #9d00ff);
+  --button-animation-bg-hover: linear-gradient(45deg, #9d00ff, #7d00ff);
+  --button-animation-padding: 10px 20px;
+  --button-animation-radius: 12px;
+  --button-animation-font-size: 0.95rem;
+  --button-animation-shadow: 0 6px 15px rgba(125, 0, 255, 0.4), 0 2px 5px rgba(0, 0, 0, 0.2);
+  --button-animation-shadow-hover: 0 8px 20px rgba(125, 0, 255, 0.6), 0 0 15px rgba(125, 0, 255, 0.3);
+  --button-animation-before-bg: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+  --button-animation-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --button-animation-before-transition: left 0.7s ease;
 }
 
-/* Stylized refresh button */
+/* Base Button Styles (Shared) */
+.buttonMain,
 .animationButton {
-  padding: 10px 20px;
-  background: linear-gradient(45deg, #7d00ff, #9d00ff);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.95rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  color: var(--button-color);
+  border: var(--button-border);
+  font-weight: var(--button-font-weight);
+  text-transform: var(--button-text-transform);
+  letter-spacing: var(--button-letter-spacing);
+  text-decoration: var(--button-text-decoration);
   cursor: pointer;
+}
+
+/* Main Button */
+.buttonMain {
+  padding: var(--button-main-padding);
+  border-radius: var(--button-main-radius);
+  background: var(--button-main-bg);
+  font-size: var(--button-main-font-size);
+  box-shadow: var(--button-main-shadow);
+  transition: var(--button-main-transition);
+}
+
+.buttonMain:hover {
+  background: var(--button-main-bg-hover);
+  box-shadow: var(--button-main-shadow-hover);
+  transform: var(--button-main-scale-hover);
+}
+
+.buttonMain:active {
+  transform: var(--button-main-scale-active);
+  box-shadow: var(--button-main-shadow-active);
+}
+
+/* Animation Button */
+.animationButton {
+  padding: var(--button-animation-padding);
+  background: var(--button-animation-bg);
+  font-size: var(--button-animation-font-size);
+  border-radius: var(--button-animation-radius);
+  box-shadow: var(--button-animation-shadow);
+  transition: var(--button-animation-transition);
   position: relative;
   overflow: hidden;
   z-index: 1;
-  box-shadow: 0 6px 15px rgba(125, 0, 255, 0.4),
-    0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .animationButton::before {
@@ -39,18 +96,14 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0) 100%);
-  transition: left 0.7s ease;
+  background: var(--button-animation-before-bg);
+  transition: var(--button-animation-before-transition);
   z-index: -1;
 }
 
 .animationButton:hover {
-  background: linear-gradient(45deg, #9d00ff, #7d00ff);
-  box-shadow: 0 8px 20px rgba(125, 0, 255, 0.6),
-    0 0 15px rgba(125, 0, 255, 0.3);
+  background: var(--button-animation-bg-hover);
+  box-shadow: var(--button-animation-shadow-hover);
   transform: translateY(-2px);
 }
 
@@ -63,16 +116,19 @@
   box-shadow: 0 4px 10px rgba(125, 0, 255, 0.3);
 }
 
-
+/* Global Reset */
 * {
-
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-button {
-  cursor: pointer;
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .buttonMain {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -81,4 +137,18 @@ button {
     text-align: center;
   }
 
+  .buttonMain {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .buttonMain {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    width: 90%;
+  }
 }

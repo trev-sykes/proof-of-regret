@@ -250,6 +250,7 @@
         display: none;
     }
 
+
     .navigation {
         padding: 0 15px;
         height: 60px;
@@ -307,6 +308,10 @@
     }
 
     .logo {
+        display: none;
+    }
+
+    .logoTag {
         display: none;
     }
 }
