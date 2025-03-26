@@ -1,358 +1,443 @@
 <!DOCTYPE html>
 <!-- saved from url=(0029)http://localhost:5173/confess -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <script type="module">
-import RefreshRuntime from "/@react-refresh"
-RefreshRuntime.injectIntoGlobalHook(window)
-window.$RefreshReg$ = () => {}
-window.$RefreshSig$ = () => (type) => type
-window.__vite_plugin_react_preamble_installed__ = true
-</script>
+<html lang="en">
 
-  <script type="module" src="./Vite + React + TS_files/client"></script>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="module">
+        import RefreshRuntime from "/@react-refresh"
+        RefreshRuntime.injectIntoGlobalHook(window)
+        window.$RefreshReg$ = () => { }
+        window.$RefreshSig$ = () => (type) => type
+        window.__vite_plugin_react_preamble_installed__ = true
+    </script>
 
-  
-  <link rel="icon" type="image/svg+xml" href="http://localhost:5173/vite.svg">
-  <link href="./Vite + React + TS_files/css2" rel="stylesheet">
-  <link href="./Vite + React + TS_files/css2(1)" rel="stylesheet">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vite + React + TS</title>
-<style type="text/css" data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/index.css">:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-button {
-  cursor: pointer;
-}</style><style type="text/css" data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/components/homeHero/Hero.module.css">._hero_h5m1m_1 {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-image: url('/src/assets/hero-background.jpg');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-._container_h5m1m_13 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100vh;
-    z-index: 1000;
-    background: radial-gradient(circle at center, rgba(29, 29, 29, 0.1) 0%, rgb(11, 11, 11) 40%);
-
-    /* Enhanced gradient with icy blue tones for a frostier feel */
-    /* backdrop-filter: blur(15px); */
-    /* Increased blur for a deeper frost effect */
-    /* -webkit-backdrop-filter: blur(15px); */
-}
-
-._card_h5m1m_28 {
-    width: 600px;
-    height: 600px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* Cooler, more translucent background for a frosted glass effect */
-    background: rgba(230, 240, 255, 0.01);
-    /* Softer, wider shadow with a slight blue tint */
-    box-shadow: 0 10px 40px rgba(0, 20, 60, 0.25);
-    backdrop-filter: blur(4px);
-    /* Stronger blur for a thicker frost layer */
-    -webkit-backdrop-filter: blur(4px);
-    border-radius: 50%;
-    /* Slightly larger radius for a smoother, icy edge */
-    /* Enhanced border with a subtle icy glow */
-    border: none;
-    text-align: center;
-    /* Optional: Add a faint inner glow for extra frostiness */
-    position: relative;
-    overflow: hidden;
-}
-
-._card_h5m1m_28::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0) 70%);
-    pointer-events: none;
-    /* Ensures it doesn’t interfere with interactions */
-}
-
-._titleContainer_h5m1m_65 {
-    flex: 1;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-}
-
-._title_h5m1m_65 {
-    font-size: 2.5rem;
-    font-family: "Special Elite", monospace;
-    font-weight: bold;
-    text-align: center;
-    white-space: nowrap;
-    background: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    mask-image: linear-gradient(to right, rgba(255, 255, 255, .80) 30%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 0.5) 140%);
-    -webkit-mask-image: linear-gradient(to right, rgba(255, 255, 255, .80) 30%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 0.5) 140%);
-    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
-    user-select: none;
-    margin-bottom: 15px;
-}
-
-._buttonContainer_h5m1m_91 {
-    width: 100%;
-}
-
-._button_h5m1m_91 {
-    border: 1px solid rgb(131, 132, 121);
-    background-color: white;
-    font-family: monospace;
-    width: 150px;
-    padding: 10px;
-    margin-top: 300px;
-    margin-right: 15px;
-    border-radius: 2.5px;
-    transition: all 150ms;
-    font-size: 1.05rem;
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-}
-
-._button_h5m1m_91:last-child {
-    margin-right: 0;
-}
-
-._button_h5m1m_91:hover {
-    transform: scale(1.01);
-}</style><style type="text/css" data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/components/loading/Loading.module.css">._loading_wsso6_1 {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    /* Reasonable default, adjust as needed */
-}
-
-._hands_wsso6_11 {
-    height: 100%;
-    /* Inherit from parent */
-    background: rgba(101, 101, 101, .5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: inset 1px 1px 10px black;
-    animation: _hueAnimation_wsso6_1 1.25s linear infinite;
-    /* Added infinite for continuous effect */
-}
-
-@keyframes _hueAnimation_wsso6_1 {
-    0% {
-        filter: hue-rotate(0deg);
-    }
-
-    50% {
-        filter: hue-rotate(170deg);
-    }
-
-    100% {
-        filter: hue-rotate(0deg);
-    }
-}</style><style type="text/css" data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/components/confessionHero/ConfessionHero.module.css">._container_1fdhh_1 {
-    width: 100%;
-    margin: 0 auto;
-    padding: 15px;
-    font-family: "Special Elite", monospace;
-}
-
-._confessionsInformationContainer_1fdhh_8 {
-    width: 100%;
-    height: 15vh;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-}
-
-._confessionsInformationItem_1fdhh_17 {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: center;
-}
-
-._confessionsInformaionTitle_1fdhh_25 {
-    font-size: 1.5rem;
-    margin-right: 10px;
-}
-
-._confessionsInformationDescription_1fdhh_30 {
-    font-size: 1.5rem;
-    margin-top: 4px;
-}</style><style type="text/css" data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/components/confessionMain/ConfessionMain.module.css">._container_2o6ai_1 {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: "Special Elite", monospace;
-}
-
-._confessContainer_2o6ai_11 {
-    width: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    <script type="module" src="./Vite + React + TS_files/client"></script>
 
 
-}
+    <link rel="icon" type="image/svg+xml" href="http://localhost:5173/vite.svg">
+    <link href="./Vite + React + TS_files/css2" rel="stylesheet">
+    <link href="./Vite + React + TS_files/css2(1)" rel="stylesheet">
 
-._label_2o6ai_21 {
-    font-size: 2.5rem;
-    margin-right: 15px;
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vite + React + TS</title>
+    <style type="text/css" data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/index.css">
+        :root {
+            font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            font-weight: 400;
 
-}
+            color-scheme: light dark;
+            color: rgba(255, 255, 255, 0.87);
+            background-color: #242424;
 
-._input_2o6ai_27 {
-    min-width: 700px;
-    max-width: 700px;
-    width: 700px;
-    font-size: 1.5rem;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    /* Add monospace as a fallback */
-    height: 200px;
-    min-height: 200px;
-    max-height: 200px;
-    border-radius: 15px;
-    padding: 15px 15px 50px 15px;
-    /* Ensure font consistency across states */
-    -webkit-font-smoothing: antialiased;
-    /* Better rendering on WebKit browsers */
-    -moz-osx-font-smoothing: grayscale;
-    /* Better rendering on macOS/Firefox */
-    outline: none;
-    /* Remove default focus outline if unwanted */
-}
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-/* Handle focus state explicitly */
-._input_2o6ai_27:focus {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    /* Reinforce font-family */
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* Optional: Placeholder styling if using one */
-._input_2o6ai_27::placeholder {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-}
+        button {
+            cursor: pointer;
+        }
+    </style>
+    <style type="text/css"
+        data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/components/homeHero/Hero.module.css">
+        ._hero_h5m1m_1 {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url('/src/assets/hero-background.jpg');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
 
-._inputContainer_2o6ai_59 {
-    margin-bottom: 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 250px;
-}
+        ._container_h5m1m_13 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+            z-index: 1000;
+            background: radial-gradient(circle at center, rgba(29, 29, 29, 0.1) 0%, rgb(11, 11, 11) 40%);
 
-._button_2o6ai_67 {
-    /* Size and shape */
-    padding: 12px 25px;
-    border-radius: 8px;
-    min-width: 150px;
+            /* Enhanced gradient with icy blue tones for a frostier feel */
+            /* backdrop-filter: blur(15px); */
+            /* Increased blur for a deeper frost effect */
+            /* -webkit-backdrop-filter: blur(15px); */
+        }
 
-    /* Dark, gritty colors */
-    background-color: #c3c3c3;
-    /* Deep charcoal base */
-    color: #000000;
-    /* Muted, dusty gray text */
-    border: 2px solid #1f1f1f;
-    /* Slightly darker, worn border */
+        ._card_h5m1m_28 {
+            width: 600px;
+            height: 600px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Cooler, more translucent background for a frosted glass effect */
+            background: rgba(230, 240, 255, 0.01);
+            /* Softer, wider shadow with a slight blue tint */
+            box-shadow: 0 10px 40px rgba(0, 20, 60, 0.25);
+            backdrop-filter: blur(4px);
+            /* Stronger blur for a thicker frost layer */
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 50%;
+            /* Slightly larger radius for a smoother, icy edge */
+            /* Enhanced border with a subtle icy glow */
+            border: none;
+            text-align: center;
+            /* Optional: Add a faint inner glow for extra frostiness */
+            position: relative;
+            overflow: hidden;
+        }
 
-    /* Typography */
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    /* Keeping that code vibe */
-    font-size: 1.2rem;
-    font-weight: 600;
-    /* Slightly bold for heft */
-    text-transform: uppercase;
-    /* Adds a stark, commanding feel */
-    letter-spacing: 1px;
+        ._card_h5m1m_28::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none;
+            /* Ensures it doesn’t interfere with interactions */
+        }
 
-    /* Grunge effects */
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.7),
-        /* Inner shadow for depth */
-        0 3px 6px rgba(0, 0, 0, 0.5);
-    /* Subtle outer shadow */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
-    /* Faint gritty overlay */
+        ._titleContainer_h5m1m_65 {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 
-    /* Interaction */
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+        }
 
-/* Hover state: Amp up the mood */
-._button_2o6ai_67:hover {
-    background-color: #3c3c3c;
-    /* Slightly lighter but still dark */
-    color: #d9d9d9;
-    /* Brightens text just a tad */
-    border-color: #333333;
-    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8),
-        0 5px 10px rgba(0, 0, 0, 0.6);
-}
+        ._title_h5m1m_65 {
+            font-size: 2.5rem;
+            font-family: "Special Elite", monospace;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+            background: linear-gradient(to right, rgb(255, 255, 255), rgb(255, 255, 255));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            mask-image: linear-gradient(to right, rgba(255, 255, 255, .80) 30%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 0.5) 140%);
+            -webkit-mask-image: linear-gradient(to right, rgba(255, 255, 255, .80) 30%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 0.5) 140%);
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
+            user-select: none;
+            margin-bottom: 15px;
+        }
 
-/* Active state: Pressed, gritty feel */
-._button_2o6ai_67:active {
-    background-color: #1f1f1f;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
-    /* Deepens the inset */
-    transform: translateY(2px);
-    /* Slight push down */
-}</style><style type="text/css" data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/pages/confess/Confess.module.css">._page_ti4ni_1 {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}</style></head>
+        ._buttonContainer_h5m1m_91 {
+            width: 100%;
+        }
+
+        ._button_h5m1m_91 {
+            border: 1px solid rgb(131, 132, 121);
+            background-color: white;
+            font-family: monospace;
+            width: 150px;
+            padding: 10px;
+            margin-top: 300px;
+            margin-right: 15px;
+            border-radius: 2.5px;
+            transition: all 150ms;
+            font-size: 1.05rem;
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+        }
+
+        ._button_h5m1m_91:last-child {
+            margin-right: 0;
+        }
+
+        ._button_h5m1m_91:hover {
+            transform: scale(1.01);
+        }
+    </style>
+    <style type="text/css"
+        data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/components/loading/Loading.module.css">
+        ._loading_wsso6_1 {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            /* Reasonable default, adjust as needed */
+        }
+
+        ._hands_wsso6_11 {
+            height: 100%;
+            /* Inherit from parent */
+            background: rgba(101, 101, 101, .5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 1px 1px 10px black;
+            animation: _hueAnimation_wsso6_1 1.25s linear infinite;
+            /* Added infinite for continuous effect */
+        }
+
+        @keyframes _hueAnimation_wsso6_1 {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            50% {
+                filter: hue-rotate(170deg);
+            }
+
+            100% {
+                filter: hue-rotate(0deg);
+            }
+        }
+    </style>
+    <style type="text/css"
+        data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/components/confessionHero/ConfessionHero.module.css">
+        ._container_1fdhh_1 {
+            width: 100%;
+            margin: 0 auto;
+            padding: 15px;
+            font-family: "Special Elite", monospace;
+        }
+
+        ._confessionsInformationContainer_1fdhh_8 {
+            width: 100%;
+            height: 15vh;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        ._confessionsInformationItem_1fdhh_17 {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        ._confessionsInformaionTitle_1fdhh_25 {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        ._confessionsInformationDescription_1fdhh_30 {
+            font-size: 1.5rem;
+            margin-top: 4px;
+        }
+    </style>
+    <style type="text/css"
+        data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/components/confessionMain/ConfessionMain.module.css">
+        ._container_2o6ai_1 {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: "Special Elite", monospace;
+        }
+
+        ._confessContainer_2o6ai_11 {
+            width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+
+        }
+
+        ._label_2o6ai_21 {
+            font-size: 2.5rem;
+            margin-right: 15px;
+
+        }
+
+        ._input_2o6ai_27 {
+            min-width: 700px;
+            max-width: 700px;
+            width: 700px;
+            font-size: 1.5rem;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            /* Add monospace as a fallback */
+            height: 200px;
+            min-height: 200px;
+            max-height: 200px;
+            border-radius: 15px;
+            padding: 15px 15px 50px 15px;
+            /* Ensure font consistency across states */
+            -webkit-font-smoothing: antialiased;
+            /* Better rendering on WebKit browsers */
+            -moz-osx-font-smoothing: grayscale;
+            /* Better rendering on macOS/Firefox */
+            outline: none;
+            /* Remove default focus outline if unwanted */
+        }
+
+        /* Handle focus state explicitly */
+        ._input_2o6ai_27:focus {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            /* Reinforce font-family */
+        }
+
+        /* Optional: Placeholder styling if using one */
+        ._input_2o6ai_27::placeholder {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        ._inputContainer_2o6ai_59 {
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 250px;
+        }
+
+        ._button_2o6ai_67 {
+            /* Size and shape */
+            padding: 12px 25px;
+            border-radius: 8px;
+            min-width: 150px;
+
+            /* Dark, gritty colors */
+            background-color: #c3c3c3;
+            /* Deep charcoal base */
+            color: #000000;
+            /* Muted, dusty gray text */
+            border: 2px solid #1f1f1f;
+            /* Slightly darker, worn border */
+
+            /* Typography */
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            /* Keeping that code vibe */
+            font-size: 1.2rem;
+            font-weight: 600;
+            /* Slightly bold for heft */
+            text-transform: uppercase;
+            /* Adds a stark, commanding feel */
+            letter-spacing: 1px;
+
+            /* Grunge effects */
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.7),
+                /* Inner shadow for depth */
+                0 3px 6px rgba(0, 0, 0, 0.5);
+            /* Subtle outer shadow */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+            /* Faint gritty overlay */
+
+            /* Interaction */
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover state: Amp up the mood */
+        ._button_2o6ai_67:hover {
+            background-color: #3c3c3c;
+            /* Slightly lighter but still dark */
+            color: #d9d9d9;
+            /* Brightens text just a tad */
+            border-color: #333333;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8),
+                0 5px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Active state: Pressed, gritty feel */
+        ._button_2o6ai_67:active {
+            background-color: #1f1f1f;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
+            /* Deepens the inset */
+            transform: translateY(2px);
+            /* Slight push down */
+        }
+    </style>
+    <style type="text/css"
+        data-vite-dev-id="/Users/trev/Desktop/proof_of_regret/vite/src/pages/confess/Confess.module.css">
+        ._page_ti4ni_1 {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
 
 <body style="overflow: auto;" cz-shortcut-listen="true">
-  <div id="root"><div><div style="position: relative;"><div style="position: fixed; inset: 0px; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 10;"><div class="_loading_wsso6_1"><div class="_hands_wsso6_11" style="transition: background 1s; background: linear-gradient(to left, rgba(0, 0, 0, 0.25) 100%, rgba(100, 100, 100, 0.25));"></div></div></div><div style="opacity: 1; transition: opacity 1s; visibility: visible;"><div style="position: relative;"><div style="position: fixed; inset: 0px; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 10;"><div class="_loading_wsso6_1"><div class="_hands_wsso6_11" style="transition: background 1s; background: linear-gradient(to left, rgba(0, 0, 0, 0.25) 100%, rgba(100, 100, 100, 0.25));"></div></div></div><div style="opacity: 1; transition: opacity 1s; visibility: visible;"><div class="_page_ti4ni_1"><section class="_container_1fdhh_1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-step-back"><line x1="18" x2="18" y1="20" y2="4"></line><polygon points="14,20 4,12 14,4"></polygon></svg><div class="_confessionsInformationContainer_1fdhh_8"><div class="_confessionsInformationItem_1fdhh_17"><p class="_confessionsInformaionTitle_1fdhh_25">Total Confessions:</p><p class="_confessionsInformationDescription_1fdhh_30">1</p></div><div class="_confessionsInformationItem_1fdhh_17"><p class="_confessionsInformaionTitle_1fdhh_25">Active Confessions:</p><p class="_confessionsInformationDescription_1fdhh_30">0</p></div></div></section><section class="_container_2o6ai_1"><div class="_confessContainer_2o6ai_11"><div class="_inputContainer_2o6ai_59"><label for="confession" class="_label_2o6ai_21">Confess so that you may be forgiven</label><textarea id="confession" placeholder="Confess to seek forgiveness" class="_input_2o6ai_27"></textarea></div><button type="button" disabled="" class="_button_2o6ai_67">Confess</button></div></section></div></div></div></div></div></div></div>
-  <script type="module" src="./Vite + React + TS_files/main.tsx"></script>
+    <div id="root">
+        <div>
+            <div style="position: relative;">
+                <div
+                    style="position: fixed; inset: 0px; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 10;">
+                    <div class="_loading_wsso6_1">
+                        <div class="_hands_wsso6_11"
+                            style="transition: background 1s; background: linear-gradient(to left, rgba(0, 0, 0, 0.25) 100%, rgba(100, 100, 100, 0.25));">
+                        </div>
+                    </div>
+                </div>
+                <div style="opacity: 1; transition: opacity 1s; visibility: visible;">
+                    <div style="position: relative;">
+                        <div
+                            style="position: fixed; inset: 0px; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 10;">
+                            <div class="_loading_wsso6_1">
+                                <div class="_hands_wsso6_11"
+                                    style="transition: background 1s; background: linear-gradient(to left, rgba(0, 0, 0, 0.25) 100%, rgba(100, 100, 100, 0.25));">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="opacity: 1; transition: opacity 1s; visibility: visible;">
+                            <div class="_page_ti4ni_1">
+                                <section class="_container_1fdhh_1"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="lucide lucide-step-back">
+                                        <line x1="18" x2="18" y1="20" y2="4"></line>
+                                        <polygon points="14,20 4,12 14,4"></polygon>
+                                    </svg>
+                                    <div class="_confessionsInformationContainer_1fdhh_8">
+                                        <div class="_confessionsInformationItem_1fdhh_17">
+                                            <p class="_confessionsInformaionTitle_1fdhh_25">Total Confessions:</p>
+                                            <p class="_confessionsInformationDescription_1fdhh_30">1</p>
+                                        </div>
+                                        <div class="_confessionsInformationItem_1fdhh_17">
+                                            <p class="_confessionsInformaionTitle_1fdhh_25">Active Confessions:</p>
+                                            <p class="_confessionsInformationDescription_1fdhh_30">0</p>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="_container_2o6ai_1">
+                                    <div class="_confessContainer_2o6ai_11">
+                                        <div class="_inputContainer_2o6ai_59"><label for="confession"
+                                                class="_label_2o6ai_21">Confess so that you may be
+                                                forgiven</label><textarea id="confession"
+                                                placeholder="Confess to seek forgiveness"
+                                                class="_input_2o6ai_27"></textarea></div><button type="button"
+                                            disabled="" class="_button_2o6ai_67">Confess</button>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="./Vite + React + TS_files/main.tsx"></script>
 
 
-</body></html>
+</body>
+
+</html>

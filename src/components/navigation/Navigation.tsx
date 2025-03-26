@@ -60,7 +60,7 @@ const Navigation: React.FC = () => {
 
                 {/* Left Section: Logo, Home Button, and Back Button */}
                 <div className={styles.leftContainer}>
-                    <img className={styles.logo} src={logo} alt="logo" />
+                    <img className={styles.logo} src={logo} alt="logo" /><span>Proof-Of-Regret</span>
 
                     {currentPath !== '/' && currentPath !== '/docs' && (
                         <Link to="/" className={styles.homeButton}>
