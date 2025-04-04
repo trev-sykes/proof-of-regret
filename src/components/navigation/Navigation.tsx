@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { LogIn, LogOut, Home, FileText, ChevronLeft } from 'lucide-react';
 import Blockies from 'react-blockies';
-import logo from "../../assets/logo.png";
 import { usePathnameStore } from '../../store/usePathnameStore';
 import styles from './Navigation.module.css';
 import useAlert from '../../hooks/useAlert';
@@ -60,7 +59,7 @@ const Navigation: React.FC = () => {
 
                 {/* Left Section: Logo, Home Button, and Back Button */}
                 <div className={styles.leftContainer}>
-                    <img className={styles.logo} src={logo} alt="logo" /><span className={styles.logoTag}>Proof-Of-Regret</span>
+                    <span className={styles.logoTag}>Proof-Of-Regret</span>
 
                     {currentPath !== '/' && currentPath !== '/docs' && (
                         <Link to="/" className={styles.homeButton}>
