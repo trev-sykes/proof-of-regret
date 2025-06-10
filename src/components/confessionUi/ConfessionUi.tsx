@@ -25,50 +25,48 @@ export interface Confession {
 type SectionType = 'active' | 'readyToResolve' | 'forgiven' | 'unforgiven' | 'all';
 
 const ConfessionsUI: React.FC = () => {
-    // State variables for managing component data
     const { setAlert } = useAlertStore();
     const [confessions, setConfessions] = useState<Confession[]>([]);
-    const [showMyConfessions, setShowMyConfessions] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [hasInitialized, setHasInitialized] = useState(false);
     const [activeSection, setActiveSection] = useState<SectionType>('all');
+    const [isMobile, setIsMobile] = useState(false); // New state for mobile detection
 
     const actionTypeRef = useRef<ActionType | null>(null);
     const messageTypeRef = useRef<any>(null);
-    // Updated contract write hook
-    const {
-        data: hash,
-        writeContract,
-        error: contractError
-    } = useWriteContract();
+    const { data: hash, writeContract, error: contractError } = useWriteContract();
+    const { isLoading: isTxLoading, isSuccess: isTxSuccess } = useWaitForTransactionReceipt({ hash });
 
-    // Updated transaction receipt hook
-    const {
-        isLoading: isTxLoading,
-        isSuccess: isTxSuccess
-    } = useWaitForTransactionReceipt({
-        hash,
-    });
+    // Handle window resize to toggle mobile view
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 600);
+        };
+        handleResize(); // Initial check
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     useEffect(() => {
         if (isTxLoading) {
             setAlert({
                 action: actionTypeRef.current,
                 type: 'pending',
                 message: `${messageTypeRef.current} pending`
-            })
+            });
         }
         if (isTxSuccess) {
             setAlert({
                 action: actionTypeRef.current,
                 type: 'success',
                 message: `${messageTypeRef.current} successful!`
-            })
+            });
         }
-    }, [isTxLoading, isTxSuccess])
+    }, [isTxLoading, isTxSuccess, setAlert]);
 
     const handleForgive = async (id: number) => {
         actionTypeRef.current = 'forgive';
-        messageTypeRef.current = 'Forgiveness '
+        messageTypeRef.current = 'Forgiveness ';
         try {
             const fee = parseEther('0.0001');
             await writeContract({
@@ -77,12 +75,12 @@ const ConfessionsUI: React.FC = () => {
                 functionName: 'forgive',
                 args: [id],
                 value: fee
-            })
+            });
         } catch (err: any) {
             console.error("Error handling forgive:", err.message);
-            console.error('Contract Error', contractError)
+            console.error('Contract Error', contractError);
             actionTypeRef.current = null;
-            messageTypeRef.current = null
+            messageTypeRef.current = null;
             throw err;
         }
     };
@@ -96,7 +94,7 @@ const ConfessionsUI: React.FC = () => {
                 abi: contractABI,
                 functionName: 'resolve',
                 args: [id],
-            })
+            });
         } catch (err: any) {
             console.error("Error handling resolve:", err.message);
             console.error('Contract Error', contractError);
@@ -105,6 +103,7 @@ const ConfessionsUI: React.FC = () => {
             throw err;
         }
     };
+
     const fetchData = useCallback(async () => {
         try {
             const count = await getConfessionCount();
@@ -132,7 +131,6 @@ const ConfessionsUI: React.FC = () => {
             const confessionPromises = Array.from({ length: adjustedCount }, (_, i) =>
                 getConfession((i + 1).toString())
                     .then((data: any) => ({
-
                         id: i + 1,
                         confessor: data[0],
                         confession: data[1],
@@ -160,16 +158,14 @@ const ConfessionsUI: React.FC = () => {
             setIsLoading(false);
             setHasInitialized(true);
         }
-    }, [getConfessionCount, getConfession]);
+    }, [confessions]);
 
-    // Load data on component mount only once
     useEffect(() => {
         if (!hasInitialized) {
             fetchData();
         }
-    }, []);
+    }, [fetchData, hasInitialized]);
 
-    // Forgive a confession with confirmation and error handling
     const forgive = async (id: number) => {
         const result = await Swal.fire({
             title: 'Confirm Forgiveness',
@@ -195,7 +191,6 @@ const ConfessionsUI: React.FC = () => {
         }
     };
 
-    // Resolve a confession with confirmation and error handling
     const resolve = async (id: number) => {
         const result = await Swal.fire({
             title: 'Confirm Resolution',
@@ -220,15 +215,11 @@ const ConfessionsUI: React.FC = () => {
         }
     };
 
-
-
-    // Handle refresh button click
     const handleRefresh = () => {
         setIsLoading(true);
         fetchData();
     };
 
-    // Section tabs configuration
     const sectionTabs = [
         { id: 'all', label: 'All Confessions' },
         { id: 'active', label: `Active (${filter.activeConfessions(confessions).length})` },
@@ -237,7 +228,6 @@ const ConfessionsUI: React.FC = () => {
         { id: 'unforgiven', label: `Unforgiven (${filter.resolvedConfessionsByForgiveness(confessions, false).length})` }
     ];
 
-    // Render the appropriate section based on active tab
     const renderActiveSection = () => {
         if (activeSection === 'all') {
             return (
@@ -260,7 +250,6 @@ const ConfessionsUI: React.FC = () => {
         }
     };
 
-    // Render a specific section
     const renderSection = (sectionType: SectionType, title: string) => {
         let sectionConfessions: Confession[] = [];
         let cardType: 'active' | 'inactive' | 'forgiven' | 'unforgiven' | 'ready-for-resolve' = 'active';
@@ -310,25 +299,38 @@ const ConfessionsUI: React.FC = () => {
         );
     };
 
-    // Render loading state or main UI
     if (isLoading) {
         return <div className={styles.loading}>Loading confessions...</div>;
     }
 
     return (
         <div className={styles.container}>
-            {/* Tooltips */}
             <Tooltip id="forgive-tooltip" content="Forgive this confession (costs 0.0001 ETH)" />
             <Tooltip id="resolve-tooltip" content="Resolve this confession (only after expiration)" />
-            <div className={styles.filterSection}>
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={showMyConfessions}
-                        onChange={() => setShowMyConfessions(!showMyConfessions)}
-                    />
-                    Show only my confessions
-                </label>
+            <div className={styles.sectionTabs}>
+                {isMobile ? (
+                    <select
+                        className={styles.sectionDropdown}
+                        value={activeSection}
+                        onChange={(e) => setActiveSection(e.target.value as SectionType)}
+                    >
+                        {sectionTabs.map((tab) => (
+                            <option key={tab.id} value={tab.id}>
+                                {tab.label}
+                            </option>
+                        ))}
+                    </select>
+                ) : (
+                    sectionTabs.map((tab) => (
+                        <div
+                            key={tab.id}
+                            className={`${styles.sectionTab} ${activeSection === tab.id ? styles.active : ''}`}
+                            onClick={() => setActiveSection(tab.id as SectionType)}
+                        >
+                            {tab.label}
+                        </div>
+                    ))
+                )}
                 <button
                     onClick={handleRefresh}
                     className="animationButton"
@@ -336,24 +338,7 @@ const ConfessionsUI: React.FC = () => {
                     Refresh
                 </button>
             </div>
-
-            {/* Section tabs */}
-            <div className={styles.sectionTabs}>
-                {sectionTabs.map((tab) => (
-                    <div
-                        key={tab.id}
-                        className={`${styles.sectionTab} ${activeSection === tab.id ? styles.active : ''}`}
-                        onClick={() => setActiveSection(tab.id as SectionType)}
-                    >
-                        {tab.label}
-                    </div>
-                ))}
-            </div>
-
-            {/* Render the active section */}
             {renderActiveSection()}
-
-
         </div>
     );
 };

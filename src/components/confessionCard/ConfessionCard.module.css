@@ -1,7 +1,6 @@
 /* Existing card styles */
 .card {
     width: 100%;
-    margin-bottom: 16px;
     background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
     border-radius: 14px;
     border: 1px solid rgba(255, 0, 122, 0.15);
@@ -26,7 +25,7 @@
 .cardHeader {
     display: flex;
     flex-direction: column;
-    padding: 22px 24px 15px;
+    padding: 1rem;
     position: relative;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
