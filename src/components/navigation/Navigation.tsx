@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { LogIn, LogOut, Home, FileText, ChevronLeft } from 'lucide-react';
 import Blockies from 'react-blockies';
@@ -11,6 +11,7 @@ const Navigation: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { currentPath, previousPath, setPaths } = usePathnameStore();
+    const [isWalletActive, setIsWalletActive] = useState<boolean>(true);
     const { address } = useAccount();
 
     // Update paths when location changes
@@ -52,7 +53,9 @@ const Navigation: React.FC = () => {
 
                     <div className={styles.connectButtonContainer}>
                         {!address ? (
-                            <div className={styles.connectButton} >
+                            <div
+                                onClick={() => setIsWalletActive(true)}
+                                className={styles.connectButton} >
                                 <LogIn size={18} />
                                 <span>Connect</span>
                             </div>
@@ -64,7 +67,11 @@ const Navigation: React.FC = () => {
             </nav >
 
             {/* Wallet Selector Modal */}
-            < ConnectWallet />
+            {isWalletActive &&
+                < ConnectWallet
+                    handleIsHidden={setIsWalletActive}
+                />
+            }
         </>
     );
 };
