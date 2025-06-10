@@ -10,8 +10,12 @@ import { useInternetCheck } from "./hooks/useInternetCheck";
 import Offline from "./components/offline/Offline";
 import useProviderStore from "./store/useProviderAndSignerStore";
 import { useEffect } from "react";
+import { WagmiProvider } from "wagmi";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { config } from "./wagmi";
 
 function App() {
+  const client = new QueryClient();
   const { connectProvider } = useProviderStore();
   useEffect(() => {
     connectProvider();
@@ -20,19 +24,21 @@ function App() {
   const { setPaths, currentPath } = usePathnameStore();
   if (!onLine) return <Offline />
   return (
-    <div>
-      <Router>
-        <TransitionLayout>
-          <Navigation />
-          <Routes>
-            <Route path={"/"} element={<Home setPaths={setPaths} currentPath={currentPath} />} />
-            <Route path={"/confess"} element={<Confess setPaths={setPaths} />} />
-            <Route path={"/confessions"} element={<Confessions setPaths={setPaths} />} />
-            <Route path={"/docs"} element={<Docs />} />
-          </Routes >
-        </TransitionLayout>
-      </Router>
-    </div>
+    <WagmiProvider config={config} >
+      <QueryClientProvider client={client} >
+        <Router>
+          <TransitionLayout>
+            <Navigation />
+            <Routes>
+              <Route path={"/"} element={<Home setPaths={setPaths} currentPath={currentPath} />} />
+              <Route path={"/confess"} element={<Confess setPaths={setPaths} />} />
+              <Route path={"/confessions"} element={<Confessions setPaths={setPaths} />} />
+              <Route path={"/docs"} element={<Docs />} />
+            </Routes >
+          </TransitionLayout>
+        </Router>
+      </QueryClientProvider>
+    </WagmiProvider >
   )
 }
 

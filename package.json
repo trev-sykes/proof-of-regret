@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.80.6",
     "amqplib": "^0.10.5",
+    "dotenv": "^16.5.0",
     "ethers": "^6.13.5",
     "framer-motion": "^12.4.10",
     "lucide-react": "^0.475.0",
@@ -23,6 +25,8 @@
     "react-spinners": "^0.15.0",
     "react-tooltip": "^5.28.0",
     "sweetalert2": "^11.6.13",
+    "viem": "^2.31.0",
+    "wagmi": "^2.15.6",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
