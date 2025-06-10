@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import useAlert from '../../hooks/useAlert';
-import CustomAlert from '../alert/Alert';
-import useContractWrite from '../../hooks/useContractWrite';
 import Swal from 'sweetalert2';
 import { useForm } from '../../hooks/useForm';
 import styles from './ConfessUi.module.css';
+import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { parseEther } from 'viem';
+import { contractABI, contractAddress } from '../../contracts/ProofOfRegret';
+import { useAlertStore } from '../../store/alertStore';
 
 // Spinner for loading flair
 const Spinner = () => <div className={styles.spinner}></div>;
@@ -16,34 +17,69 @@ const CharacterLimitAlert: React.FC<CharacterLimitAlertProps> = ({ message }) =>
 );
 
 const ConfessionMain: React.FC = () => {
-    const { alertStatus, showAlert } = useAlert();
-    const { handleConfession } = useContractWrite();
-    const { formInputs, handleInputChange } = useForm({ confess: '', tweetUrl: '' });
+    const { setAlert } = useAlertStore();
+    const { formInputs, handleInputChange } = useForm({ confess: '' });
     const [isConfessing, setIsConfessing] = useState(false);
 
+    // Updated contract write hook
+    const {
+        data: hash,
+        writeContract,
+        error: contractError
+    } = useWriteContract();
+
+    const {
+        isLoading: isTxLoading,
+        isSuccess: isTxSuccess
+    } = useWaitForTransactionReceipt({
+        hash,
+    });
+    useEffect(() => {
+        if (isTxLoading) {
+            setAlert({
+                action: 'confess',
+                type: 'pending',
+                message: `Confession pending`
+            })
+        }
+        if (isTxSuccess) {
+            setAlert({
+                action: 'confess',
+                type: 'success',
+                message: `Confession successful!`
+            })
+
+        }
+    }, [isTxLoading, isTxSuccess])
+
+    const handleConfession = async (confession: string) => {
+        try {
+            const amount: any = parseEther('0.001');
+            await writeContract({
+                address: contractAddress,
+                abi: contractABI,
+                functionName: 'confess',
+                args: [confession],
+                value: amount
+            })
+        } catch (err: any) {
+            console.error("Error handling confession:", err.message);
+            console.error('Contract Error', contractError)
+            throw err;
+        }
+    };
     // Fade-in on mount
     useEffect(() => {
         const container = document.querySelector(`.${styles.container}`);
         if (container) container.classList.add(styles.mounted);
     }, []);
 
-    // User-friendly error messages
-    const getUserFriendlyError = (reason: string) => {
-        switch (reason) {
-            case 'WrongConfessionAmount': return 'Send exactly 0.001 ETH to confess.';
-            case 'ConfessionTooLong': return 'Keep it under 280 characters.';
-            case 'AlreadyResolved': return 'This one’s done, fam.';
-            case 'MaxForgivesReached': return 'You’ve already forgiven this.';
-            default: return `Oops, something broke: ${reason}`;
-        }
-    };
-
     // Confession handler with X integration
     const confess = async () => {
         const { confess } = formInputs;
         const result = await Swal.fire({
             title: 'Confirm Your Confession',
-            html: 'Dropping 0.001 ETH and linking your X post—ready?',
+            html: 'Price is 0.001 ETH?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, Confess',
@@ -53,15 +89,10 @@ const ConfessionMain: React.FC = () => {
         if (result.isConfirmed) {
             setIsConfessing(true);
             try {
-                showAlert('pending', 'Posting confession...');
-                await handleConfession(confess); // Pass tweetUrl to contract
+                await handleConfession(confess);
                 handleInputChange('confess')({ target: { value: '' } });
-                handleInputChange('tweetUrl')({ target: { value: '' } });
-                showAlert('success', 'Confession live on-chain! Check it out.');
             } catch (err: any) {
-                const reason = err.reason || err.message || 'Unknown error';
-                const error = getUserFriendlyError(reason);
-                showAlert('error', error);
+                console.error("Error with confession ", err.message);
             } finally {
                 setIsConfessing(false);
             }
@@ -73,13 +104,6 @@ const ConfessionMain: React.FC = () => {
 
     return (
         <section className={styles.container}>
-            {alertStatus?.isVisible && alertStatus.type && (
-                <CustomAlert
-                    type={alertStatus.type}
-                    message={alertStatus.message}
-                    onClose={() => showAlert(null, '')}
-                />
-            )}
             <div className={styles.confessContainer}>
                 <div className={styles.inputContainer}>
                     <label htmlFor="confession" className={styles.label}>
@@ -101,9 +125,6 @@ const ConfessionMain: React.FC = () => {
                     </div>
                     {formInputs.confess && confessionLength < 20 && (
                         <CharacterLimitAlert message="Minimum 20 characters!" />
-                    )}
-                    {formInputs.tweetUrl && (
-                        <CharacterLimitAlert message="Invalid X URL—needs to be a post!" />
                     )}
                 </div>
                 <button

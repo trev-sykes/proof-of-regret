@@ -1,74 +1,42 @@
-import { useCallback, useRef, useState } from "react";
-import proofOfRegret from "../contracts/ProofOfRegret";
-import { ethers } from "ethers";
-import useProviderAndSignerStore from "../store/useProviderAndSignerStore";
-export default function useContractRead() {
-    const { provider } = useProviderAndSignerStore();
-    const [contractInformation, setContractInformation] = useState({
-        totalConfessions: 0,
-    })
-    const rpcUrl = import.meta.env.VITE_INFURA_RPC_URL;
-    if (!rpcUrl) {
-        throw new Error('RPC URL not configured. Please check your environment variables.');
+import { createPublicClient, http } from 'viem';
+import { arbitrumSepolia } from 'viem/chains';
+import { contractABI, contractAddress } from '../contracts/ProofOfRegret';
+
+const rpcUrl = import.meta.env.VITE_INFURA_RPC_URL;
+const publicClient = createPublicClient({
+    chain: arbitrumSepolia,
+    transport: http(rpcUrl),
+});
+
+// Fetch confession data from the smart contract in parallel
+const getConfessionCount = async () => {
+    if (!publicClient) return;
+    try {
+        return await publicClient.readContract({
+            address: contractAddress,
+            abi: contractABI,
+            functionName: 'confessionCount'
+
+        })
+
+    } catch (err: any) {
+        console.error('Error grabbing confession count', err.message);
+        return null;
     }
-    const refreshProtocolState = useCallback(async () => {
-        if (!provider) return;
-        const contract = new ethers.Contract(
-            proofOfRegret.contractAddress,
-            proofOfRegret.contractABI,
-            provider
-        );
-        try {
-            const [confessionCountResponse] = await Promise.all(
-                [contract.confessionCount()]
-            );
-            setContractInformation({
-                ...contractInformation,
-                totalConfessions: confessionCountResponse,
-            })
+}
+const getConfession = async (id: any) => {
+    if (!publicClient) return;
+    try {
+        return await publicClient.readContract({
+            address: contractAddress,
+            abi: contractABI,
+            functionName: 'getConfession',
+            args: [BigInt(id)]
+        })
 
-        } catch (err: any) {
-            console.error(err.message);
-        }
-    }, []);
-    const contractConfessionCountRef = useRef(false);
-    const getConfessionCount = async () => {
-        if (!provider) return;
-        if (contractConfessionCountRef.current) {
-            console.log(`Nothing to Update.`);
-            return;
-        };
-        contractConfessionCountRef.current = true;
-        const contract = new ethers.Contract(
-            proofOfRegret.contractAddress,
-            proofOfRegret.contractABI,
-            provider
-        );
-        try {
-            const response = await contract.confessionCount();
-            if (response)
-                return response;
-        } catch (err: any) {
-            console.error(err.message);
-        }
-
+    } catch (err: any) {
+        console.error('Error grabbing confesssion', err.message);
+        return null;
     }
-    const getConfession = async (id: string) => {
-        if (!provider) return;
-        const contract = new ethers.Contract(proofOfRegret.contractAddress, proofOfRegret.contractABI, provider);
-        try {
-            const response = await contract.getConfession(id);
-            if (response)
-                return response;
-            else
-                throw new Error("Error in response");
-
-
-        } catch (err: any) {
-            console.error("Error getting confessions: ", err.message);
-        }
-    }
-
-    return { refreshProtocolState, getConfessionCount, getConfession, contractInformation };
-
-} 
+}
+export { getConfessionCount, getConfession }

@@ -12,6 +12,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.80.6",
     "amqplib": "^0.10.5",
+    "canvas-confetti": "^1.9.3",
     "dotenv": "^16.5.0",
     "ethers": "^6.13.5",
     "framer-motion": "^12.4.10",

@@ -1,55 +1,58 @@
-import proofOfRegret from "../contracts/ProofOfRegret";
 import { ethers } from "ethers";
-import useProviderStore from "../store/useProviderAndSignerStore";
+import { useWriteContract } from "wagmi";
+import { contractAddress, contractABI } from "../contracts/ProofOfRegret";
 
 export default function useContractWrite() {
-    const { signer } = useProviderStore();
 
+    const {
+        writeContract,
+        error: contractError
+    } = useWriteContract();
     const handleConfession = async (confession: string) => {
         try {
-            const contractInstance = new ethers.Contract(
-                proofOfRegret.contractAddress,
-                proofOfRegret.contractABI,
-                signer
-            );
             const amount: any = ethers.parseEther('0.001');
-            const tx = await contractInstance.confess(confession, { value: amount });
-            return tx;
+            await writeContract({
+                address: contractAddress,
+                abi: contractABI,
+                functionName: 'confess',
+                args: [confession],
+                value: amount
+            })
         } catch (err: any) {
             console.error("Error handling confession:", err.message);
+            console.error('Contract Error', contractError)
             throw err;
         }
     };
 
     const handleForgive = async (id: number) => {
         try {
-            const contractInstance = new ethers.Contract(
-                proofOfRegret.contractAddress,
-                proofOfRegret.contractABI,
-                signer
-            );
-            const fee = await contractInstance.FORGIVENESS_FEE();
-            const tx = await contractInstance.forgive(id, { value: fee });
-            await tx.wait();
-            return tx;
+            const fee = ethers.parseEther('0.0001');
+            await writeContract({
+                address: contractAddress,
+                abi: contractABI,
+                functionName: 'forgive',
+                args: [id],
+                value: fee
+            })
         } catch (err: any) {
             console.error("Error handling forgive:", err.message);
+            console.error('Contract Error', contractError)
             throw err;
         }
     };
 
     const handleResolve = async (id: any) => {
         try {
-            const contractInstance = new ethers.Contract(
-                proofOfRegret.contractAddress,
-                proofOfRegret.contractABI,
-                signer
-            );
-            const tx = await contractInstance.resolve(id);
-            await tx.wait();
-            return tx;
+            await writeContract({
+                address: contractAddress,
+                abi: contractABI,
+                functionName: 'resolve',
+                args: [id],
+            })
         } catch (err: any) {
             console.error("Error handling resolve:", err.message);
+            console.error('Contract Error', contractError)
             throw err;
         }
     };

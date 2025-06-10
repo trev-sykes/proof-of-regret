@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import ConfessionCard from '../confessionCard/ConfessionCard';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { Tooltip } from 'react-tooltip';
 import Swal from 'sweetalert2';
-import useAlert from '../../hooks/useAlert';
-import useContractRead from '../../hooks/useContractRead';
-import useContractWrite from '../../hooks/useContractWrite';
-import CustomAlert from '../alert/Alert';
 import styles from "./ConfessionUi.module.css";
-import "../../index.css";
-import useProviderStore from '../../store/useProviderAndSignerStore';
+import ConfessionCard from '../confessionCard/ConfessionCard';
+import { getConfession, getConfessionCount } from '../../hooks/useContractRead';
+import { filter } from '../../utils/filter';
+import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { contractABI, contractAddress } from '../../contracts/ProofOfRegret';
+import { parseEther } from 'viem';
+import { ActionType, useAlertStore } from '../../store/alertStore';
 
-interface Confession {
+export interface Confession {
     id: string | number;
     confessor: string;
     confession: string;
@@ -26,19 +26,85 @@ type SectionType = 'active' | 'readyToResolve' | 'forgiven' | 'unforgiven' | 'al
 
 const ConfessionsUI: React.FC = () => {
     // State variables for managing component data
+    const { setAlert } = useAlertStore();
     const [confessions, setConfessions] = useState<Confession[]>([]);
     const [showMyConfessions, setShowMyConfessions] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [hasInitialized, setHasInitialized] = useState(false);
     const [activeSection, setActiveSection] = useState<SectionType>('all');
 
-    // Custom hooks for contract interaction and alerts
-    const { getConfessionCount, getConfession } = useContractRead();
-    const { handleForgive, handleResolve } = useContractWrite();
-    const { signer } = useProviderStore();
-    const { alertStatus, showAlert } = useAlert();
+    const actionTypeRef = useRef<ActionType | null>(null);
+    const messageTypeRef = useRef<any>(null);
+    // Updated contract write hook
+    const {
+        data: hash,
+        writeContract,
+        error: contractError
+    } = useWriteContract();
 
-    // Fetch confession data from the smart contract in parallel
+    // Updated transaction receipt hook
+    const {
+        isLoading: isTxLoading,
+        isSuccess: isTxSuccess
+    } = useWaitForTransactionReceipt({
+        hash,
+    });
+    useEffect(() => {
+        if (isTxLoading) {
+            setAlert({
+                action: actionTypeRef.current,
+                type: 'pending',
+                message: `${messageTypeRef.current} pending`
+            })
+        }
+        if (isTxSuccess) {
+            setAlert({
+                action: actionTypeRef.current,
+                type: 'success',
+                message: `${messageTypeRef.current} successful!`
+            })
+        }
+    }, [isTxLoading, isTxSuccess])
+
+    const handleForgive = async (id: number) => {
+        actionTypeRef.current = 'forgive';
+        messageTypeRef.current = 'Forgiveness '
+        try {
+            const fee = parseEther('0.0001');
+            await writeContract({
+                address: contractAddress,
+                abi: contractABI,
+                functionName: 'forgive',
+                args: [id],
+                value: fee
+            })
+        } catch (err: any) {
+            console.error("Error handling forgive:", err.message);
+            console.error('Contract Error', contractError)
+            actionTypeRef.current = null;
+            messageTypeRef.current = null
+            throw err;
+        }
+    };
+
+    const handleResolve = async (id: any) => {
+        actionTypeRef.current = 'resolve';
+        messageTypeRef.current = 'Resolve ';
+        try {
+            await writeContract({
+                address: contractAddress,
+                abi: contractABI,
+                functionName: 'resolve',
+                args: [id],
+            })
+        } catch (err: any) {
+            console.error("Error handling resolve:", err.message);
+            console.error('Contract Error', contractError);
+            actionTypeRef.current = null;
+            messageTypeRef.current = null;
+            throw err;
+        }
+    };
     const fetchData = useCallback(async () => {
         try {
             const count = await getConfessionCount();
@@ -49,12 +115,12 @@ const ConfessionsUI: React.FC = () => {
             } else if (typeof count === 'string') {
                 countNumber = parseInt(count);
             } else if (count === null || count === undefined) {
-                countNumber = 0;  // Handle case where count is null or undefined
+                countNumber = 0;
             } else {
-                countNumber = count as number;
+                countNumber = 0;
             }
 
-            const adjustedCount = Math.min(countNumber, 50); // Limit to 50 confessions
+            const adjustedCount = Math.min(countNumber, 50);
 
             if (adjustedCount <= 0) {
                 console.log("No confessions to fetch");
@@ -65,7 +131,8 @@ const ConfessionsUI: React.FC = () => {
 
             const confessionPromises = Array.from({ length: adjustedCount }, (_, i) =>
                 getConfession((i + 1).toString())
-                    .then(data => ({
+                    .then((data: any) => ({
+
                         id: i + 1,
                         confessor: data[0],
                         confession: data[1],
@@ -76,7 +143,7 @@ const ConfessionsUI: React.FC = () => {
                         forgiven: data[6],
                         forgivers: data[7],
                     }))
-                    .catch(err => {
+                    .catch((err: any) => {
                         console.error(`Error fetching confession ${i + 1}:`, err);
                         return null;
                     })
@@ -86,7 +153,6 @@ const ConfessionsUI: React.FC = () => {
             const confessionsData = await Promise.all(confessionPromises);
             const validConfessions = confessionsData.filter(c => c !== null) as Confession[];
             console.log("Confession data:", validConfessions);
-
             setConfessions(validConfessions);
         } catch (err: any) {
             console.error("Error fetching data:", err.message);
@@ -103,25 +169,6 @@ const ConfessionsUI: React.FC = () => {
         }
     }, []);
 
-    // Returns active confessions
-    const filterActiveConfessions = (confessions: Confession[]) => {
-        return confessions.filter(c =>
-            new Date(Number(c.deadline) * 1000) >= new Date()
-        );
-    };
-
-    // Returns ready to be resolved confessions
-    const filterReadyToResolveConfessions = (confessions: Confession[]) => {
-        return confessions.filter(c => {
-            return new Date(Number(c.deadline) * 1000) < new Date() && !c.resolved;
-        });
-    };
-
-    // Returns resolved confessions that are either forgiven or unforgiven
-    const filterResolvedConfessionsByForgiveness = (confessions: Confession[], isForgiven: boolean) => {
-        return confessions.filter(c => c.resolved && (c.forgiven === isForgiven));
-    };
-
     // Forgive a confession with confirmation and error handling
     const forgive = async (id: number) => {
         const result = await Swal.fire({
@@ -130,24 +177,19 @@ const ConfessionsUI: React.FC = () => {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, forgive',
+            cancelButtonText: 'Nah'
         });
 
         if (result.isConfirmed) {
             try {
-                showAlert('pending', 'Processing forgiveness...');
                 await handleForgive(id);
                 await fetchData();
-                showAlert('success', 'Forgiveness complete!');
             } catch (err: any) {
                 const reason = err.reason || err.message;
                 if (reason.includes('MustSendExactly0_0001ETH')) {
-                    showAlert('error', 'You must send exactly 0.0001 ETH to forgive.');
                 } else if (reason.includes('ConfessionAlreadyResolved')) {
-                    showAlert('error', 'This confession has already been resolved.');
                 } else if (reason.includes('MaximumForgivesReached')) {
-                    showAlert('error', 'You have already forgiven this confession.');
                 } else {
-                    showAlert('error', `Error: ${reason}`);
                 }
             }
         }
@@ -161,32 +203,24 @@ const ConfessionsUI: React.FC = () => {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, resolve',
+            cancelButtonText: 'Nah'
         });
 
         if (result.isConfirmed) {
             try {
-                showAlert('pending', 'Resolving confession...');
                 await handleResolve(id);
                 await fetchData();
-                showAlert('success', 'Confession resolved successfully!');
             } catch (err: any) {
                 const reason = err.reason || err.message;
                 if (reason.includes('ConfessionAlreadyResolved')) {
-                    showAlert('error', 'This confession has already been resolved.');
                 } else if (reason.includes('DeadlineNotReached')) {
-                    showAlert('error', 'The confession deadline has not been reached yet.');
                 } else {
-                    showAlert('error', `Error: ${reason}`);
                 }
             }
         }
     };
 
-    // Filter confessions based on user preference
-    // const filteredConfessions = showMyConfessions && signer && signer.address
-    //     ? confessions.filter(c => c.confessor.toLowerCase() === signer.address.toLowerCase())
-    //     : confessions;
-    const filteredConfessions = confessions;
+
 
     // Handle refresh button click
     const handleRefresh = () => {
@@ -197,10 +231,10 @@ const ConfessionsUI: React.FC = () => {
     // Section tabs configuration
     const sectionTabs = [
         { id: 'all', label: 'All Confessions' },
-        { id: 'active', label: `Active (${filterActiveConfessions(filteredConfessions).length})` },
-        { id: 'readyToResolve', label: `Ready to Resolve (${filterReadyToResolveConfessions(filteredConfessions).length})` },
-        { id: 'forgiven', label: `Forgiven (${filterResolvedConfessionsByForgiveness(filteredConfessions, true).length})` },
-        { id: 'unforgiven', label: `Unforgiven (${filterResolvedConfessionsByForgiveness(filteredConfessions, false).length})` }
+        { id: 'active', label: `Active (${filter.activeConfessions(confessions).length})` },
+        { id: 'readyToResolve', label: `Ready to Resolve (${filter.readyToResolveConfessions(confessions).length})` },
+        { id: 'forgiven', label: `Forgiven (${filter.resolvedConfessionsByForgiveness(confessions, true).length})` },
+        { id: 'unforgiven', label: `Unforgiven (${filter.resolvedConfessionsByForgiveness(confessions, false).length})` }
     ];
 
     // Render the appropriate section based on active tab
@@ -233,19 +267,19 @@ const ConfessionsUI: React.FC = () => {
 
         switch (sectionType) {
             case 'active':
-                sectionConfessions = filterActiveConfessions(filteredConfessions);
+                sectionConfessions = filter.activeConfessions(confessions);
                 cardType = 'active';
                 break;
             case 'readyToResolve':
-                sectionConfessions = filterReadyToResolveConfessions(filteredConfessions);
+                sectionConfessions = filter.readyToResolveConfessions(confessions);
                 cardType = 'ready-for-resolve';
                 break;
             case 'forgiven':
-                sectionConfessions = filterResolvedConfessionsByForgiveness(filteredConfessions, true);
+                sectionConfessions = filter.resolvedConfessionsByForgiveness(confessions, true);
                 cardType = 'forgiven';
                 break;
             case 'unforgiven':
-                sectionConfessions = filterResolvedConfessionsByForgiveness(filteredConfessions, false);
+                sectionConfessions = filter.resolvedConfessionsByForgiveness(confessions, false);
                 cardType = 'unforgiven';
                 break;
             default:
@@ -262,7 +296,6 @@ const ConfessionsUI: React.FC = () => {
                         {sectionConfessions.map((confession, index) => (
                             <ConfessionCard
                                 key={`${sectionType}-${index}`}
-                                signerAddress={signer ? signer.address : ""}
                                 confession={confession}
                                 type={cardType}
                                 resolve={resolve}
@@ -284,14 +317,9 @@ const ConfessionsUI: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            {alertStatus && alertStatus.isVisible && (
-                <CustomAlert
-                    type={alertStatus.type}
-                    message={alertStatus.message}
-                    onClose={() => showAlert(null, '')}
-                />
-            )}
-
+            {/* Tooltips */}
+            <Tooltip id="forgive-tooltip" content="Forgive this confession (costs 0.0001 ETH)" />
+            <Tooltip id="resolve-tooltip" content="Resolve this confession (only after expiration)" />
             <div className={styles.filterSection}>
                 <label>
                     <input
@@ -325,9 +353,7 @@ const ConfessionsUI: React.FC = () => {
             {/* Render the active section */}
             {renderActiveSection()}
 
-            {/* Tooltips */}
-            <Tooltip id="forgive-tooltip" content="Forgive this confession (costs 0.0001 ETH)" />
-            <Tooltip id="resolve-tooltip" content="Resolve this confession (only after expiration)" />
+
         </div>
     );
 };

@@ -8,18 +8,50 @@ import { usePathnameStore } from "../src/store/usePathnameStore";
 import Navigation from "./components/navigation/Navigation";
 import { useInternetCheck } from "./hooks/useInternetCheck";
 import Offline from "./components/offline/Offline";
-import useProviderStore from "./store/useProviderAndSignerStore";
 import { useEffect } from "react";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "./wagmi";
+import Alert from './components/alert/Alert';
+import { useOnline } from "./hooks/useOnline";
+import { useAlertStore } from "./store/alertStore";
 
 function App() {
   const client = new QueryClient();
-  const { connectProvider } = useProviderStore();
+  const isOnline = useOnline();
   useEffect(() => {
-    connectProvider();
-  }, []);
+    const alertStore = useAlertStore.getState();
+
+    if (isOnline) {
+      // 1. Clear 'persist' alerts
+      const persistAlerts = alertStore.alerts.filter(
+        (alert) => alert.type === 'persist'
+      );
+      persistAlerts.forEach((alert) => {
+        alertStore.clearAlert(alert.id);
+      });
+
+      // 2. Show brief 'network restored' alert
+      alertStore.setAlert({
+        action: null,
+        type: 'network',
+        message: '✅ Connected',
+      });
+    } else {
+      // Only show if not already displayed
+      const hasPersist = alertStore.alerts.some(
+        (alert: any) => alert.type === 'persist'
+      );
+      if (!hasPersist) {
+        alertStore.setAlert({
+          action: 'persist',
+          type: 'persist',
+          message: '⚠️ No connection',
+        });
+      }
+    }
+  }, [isOnline]);
+
   const onLine = useInternetCheck();
   const { setPaths, currentPath } = usePathnameStore();
   if (!onLine) return <Offline />
@@ -29,6 +61,7 @@ function App() {
         <Router>
           <TransitionLayout>
             <Navigation />
+            <Alert />
             <Routes>
               <Route path={"/"} element={<Home setPaths={setPaths} currentPath={currentPath} />} />
               <Route path={"/confess"} element={<Confess setPaths={setPaths} />} />

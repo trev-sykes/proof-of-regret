@@ -1,12 +1,7 @@
-import { useEffect } from "react";
-import useContractRead from "../../hooks/useContractRead";
 import styles from "./HomeUi.module.css";
 import { Link } from "react-router-dom";
 const Home: React.FC = () => {
-    const { refreshProtocolState } = useContractRead();
-    useEffect(() => {
-        refreshProtocolState();
-    }, [])
+
     return (
         <section className={styles.hero}>
             <div className={styles.container}>

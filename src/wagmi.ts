@@ -1,10 +1,19 @@
 import { http, createConfig } from 'wagmi'
-import { sepolia } from 'wagmi/chains'
-// import { injected, metaMask, safe, walletConnect } from 'wagmi/connectors'
+import { arbitrumSepolia } from 'wagmi/chains'
+import { injected, walletConnect } from 'wagmi/connectors'
 
 export const config = createConfig({
-    chains: [sepolia],
+    chains: [arbitrumSepolia],
+    connectors: [
+        injected(),
+        walletConnect({ projectId: import.meta.env.VITE_WC_PROJECT_ID }),
+    ],
     transports: {
-        [sepolia.id]: http(),
+        [arbitrumSepolia.id]: http(),
     },
 })
+declare module 'wagmi' {
+    interface Register {
+        config: typeof config
+    }
+}
